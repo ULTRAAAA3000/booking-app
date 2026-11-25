@@ -116,3 +116,8 @@ background:radial-gradient(ellipse 20% 28% at 10% 85%,#fff,transparent 70%),radi
 .sim{margin-top:64px}.sim h2{margin-bottom:24px}
 #fl{position:fixed;z-index:80;background-size:cover;background-position:center;pointer-events:none;display:none}
 @media(max-width:860px){.nl,.hostl,.vd,.vis{display:none}.grid{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}.t{font-size:6.4vw}.t.l3{font-size:11vw}#sb{height:auto;flex-wrap:wrap;padding:10px}.f{flex:1 1 44%!important;height:58px}#cal{left:0}#gp{right:0}}
+
+.cd .bi{position:absolute;z-index:3;right:12px;bottom:12px;width:42px;height:42px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;opacity:0;transform:translateY(10px) scale(.85);transition:opacity .35s,transform .45s var(--out),background .3s,color .3s;box-shadow:0 8px 20px rgba(40,20,30,.25)}
+.cd .bi svg{width:19px;height:19px}.cd:hover .bi,.cd .bi:focus-visible{opacity:1;transform:none}.cd .bi:hover{background:#f39419;color:#fff;transform:scale(1.08)}
+.cd .ci{right:62px}
+@media(hover:none){.cd .bi{opacity:1;transform:none}}

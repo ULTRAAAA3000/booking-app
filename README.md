@@ -12,9 +12,11 @@
 ```
 public/            фронтенд (деплоїться як Pages)
   index.html       головна: хіро, пошук, «Рекомендовані оселі», сторінка оселі
+  book.html        форма бронювання (дані гостя, дати, підсумок, «замовлення прийнято»)
   assets/css|js|img
   assets/js/auth.js  мінімальний акаунт: вхід, реєстрація, вхід за посиланням, соцвходи (демо-заглушка)
 wrangler.toml      конфіг Cloudflare Pages (+ закоментований біндинг D1)
+functions/         Cloudflare Pages Functions (TypeScript): /api/auth/*, /api/availability, /api/bookings
 migrations/        схема бази D1
   0001_init.sql          користувачі, сесії, оселі, фото, броні, доступність, відгуки, обране, аудит
   0002_seed_demo.sql     8 демо-осель із лендингу
@@ -49,3 +51,22 @@ npm run db:create            # скопіюйте database_id у wrangler.toml �
 npm run db:migrate:local     # локальна база з демо-даними
 npm run db:migrate:remote    # база на Cloudflare
 ```
+
+## API (functions/api)
+| Метод | Шлях | Що робить |
+|---|---|---|
+| GET | `/api/auth/me` | поточний користувач або `null` |
+| POST | `/api/auth/register`, `/api/auth/login`, `/api/auth/logout` | e-mail + пароль, сесія в HttpOnly-cookie |
+| GET | `/api/availability?slug&in&out&guests` | дані оселі, чи вільні дати, сума |
+| POST | `/api/bookings` | створити бронювання (з акаунтом або без) |
+| GET | `/api/bookings` | мої бронювання (потрібен вхід) |
+
+Сервер сам рахує суму й перевіряє дати, гостей та доступність; подвійну бронь додатково блокує тригер у базі. Листи поки не надсилаються, оплати немає.
+
+## Налаштування Cloudflare
+1. `npm run db:create` → `database_id` у `wrangler.toml` (розкоментувати блок D1) → `npm run db:migrate:remote`.
+2. Pages → Connect to Git → репозиторій; Framework: None, Build command: порожньо, Output directory: `public`.
+3. Секрет `SESSION_SECRET` (довгий випадковий рядок): `npx wrangler pages secret put SESSION_SECRET --project-name booking-app` або Dashboard → Settings → Variables and Secrets (Secret, Production і Preview).
+4. Якщо D1 не прописаний у `wrangler.toml`, додайте біндинг у Dashboard: Settings → Bindings → D1 database, змінна `DB`.
+
+Локально: `cp .dev.vars.example .dev.vars`, `npm install`, `npm run db:migrate:local`, `npm run dev`.

@@ -1,3 +1,10 @@
 name = "booking-app"
 compatibility_date = "2026-11-01"
 pages_build_output_dir = "public"
+
+# D1: розкоментуйте після `npm run db:create` і підставте database_id з виводу команди.
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "booking-app"
+# database_id = "ВАШ_DATABASE_ID"
+# migrations_dir = "migrations"

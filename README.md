@@ -12,6 +12,7 @@
 ```
 public/            фронтенд (деплоїться як Pages)
   index.html       головна: хіро, пошук, «Рекомендовані оселі», сторінка оселі
+  stays.html       каталог з фільтрами (регіон, тип, гості, ціна, дати, сортування), адреса фільтрів у URL
   account.html     особистий кабінет: бронювання (скасування, відгуки), обране, профіль, безпека, налаштування
   book.html        форма бронювання (дані гостя, дати, підсумок, «замовлення прийнято»)
   assets/css|js|img
@@ -58,7 +59,10 @@ npm run db:migrate:remote    # база на Cloudflare
 |---|---|---|
 | GET | `/api/auth/me` | поточний користувач або `null` |
 | POST | `/api/auth/register`, `/api/auth/login`, `/api/auth/logout` | e-mail + пароль, сесія в HttpOnly-cookie |
+| GET | `/api/properties?region&type&guests&min&max&in&out&q&sort&limit&offset` | каталог осель з фільтрами та вільними датами |
+| GET | `/api/properties/:slug` | повна картка оселі: опис, фото, зручності, рейтинг |
 | GET | `/api/availability?slug&in&out&guests` | дані оселі, чи вільні дати, сума |
+| GET | `/api/availability?slug&busy=1` | зайняті періоди для календаря на сторінці оселі |
 | POST | `/api/bookings` | створити бронювання (з акаунтом або без) |
 | GET | `/api/bookings` | мої бронювання (потрібен вхід) |
 
@@ -78,3 +82,6 @@ npm run db:migrate:remote    # база на Cloudflare
 4. Якщо D1 не прописаний у `wrangler.toml`, додайте біндинг у Dashboard: Settings → Bindings → D1 database, змінна `DB`.
 
 Локально: `cp .dev.vars.example .dev.vars`, `npm install`, `npm run db:migrate:local`, `npm run dev`.
+
+## Сторінка оселі
+Відкривається з головної або каталогу за адресою `index.html#stay=slug`. Дати вибираються в календарі на картці бронювання (зайняті дні вимкнені), обрані дати передаються у форму `book.html`.

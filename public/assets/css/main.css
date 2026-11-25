@@ -121,3 +121,6 @@ background:radial-gradient(ellipse 20% 28% at 10% 85%,#fff,transparent 70%),radi
 .cd .bi svg{width:19px;height:19px}.cd:hover .bi,.cd .bi:focus-visible{opacity:1;transform:none}.cd .bi:hover{background:#f39419;color:#fff;transform:scale(1.08)}
 .cd .ci{right:62px}
 @media(hover:none){.cd .bi{opacity:1;transform:none}}
+
+.bk{position:relative}.dg button{padding:12px 14px;text-align:left;font-size:13px;border-radius:12px;transition:background .25s,box-shadow .25s}.dg button:hover{background:#fff;box-shadow:0 6px 18px rgba(120,80,70,.12)}.dg button span{display:block}
+.dsm .r{display:flex;justify-content:space-between;font-size:14px;padding:2px 4px 14px}#dcal{top:152px;left:22px;right:auto;width:274px}

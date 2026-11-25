@@ -1,0 +1,29 @@
+.au{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:rgba(60,38,50,.38);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .4s}
+.au.o{opacity:1;pointer-events:auto}
+.ac{position:relative;width:min(440px,calc(100% - 32px));max-height:calc(100vh - 32px);overflow:auto;background:#fff;border-radius:26px;box-shadow:0 30px 90px rgba(80,40,40,.3);padding:34px 32px;transform:translateY(28px) scale(.98);transition:transform .6s var(--out)}
+.au.o .ac{transform:none}
+.ax{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;font-size:22px;line-height:1;transition:background .25s}.ax:hover{background:#f3e6dd}
+.at{display:flex;position:relative;background:#f3f1f0;border-radius:14px;padding:4px;margin:6px 0 22px}
+.at button{flex:1;height:38px;border-radius:11px;font-weight:600;font-size:14px;position:relative;z-index:1;color:var(--mu);transition:color .3s}.at button.a{color:var(--ink)}
+.at i{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:#fff;border-radius:11px;box-shadow:0 4px 14px rgba(120,80,70,.14);transition:transform .45s var(--ease)}.at.r i{transform:translateX(100%)}
+.ah{font:400 30px 'Playfair Display',serif;margin-bottom:6px}.as{color:var(--mu);font-size:14px;line-height:1.5;margin-bottom:20px}
+.asb{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.asb button{height:46px;border:1.4px solid #e6dad3;border-radius:13px;font-size:14px;font-weight:600;display:flex;gap:9px;align-items:center;justify-content:center;transition:background .25s,transform .25s var(--out),border-color .25s}
+.asb button:hover{background:#faf3ee;border-color:#d9c6bb;transform:translateY(-2px)}
+.asb b{width:20px;height:20px;border-radius:50%;color:#fff;font-size:11px;display:grid;place-items:center}
+.adv{display:flex;align-items:center;gap:12px;color:var(--lm);font-size:12.5px;margin:18px 0}.adv:before,.adv:after{content:"";flex:1;height:1px;background:#eadfd8}
+.afi{display:block;margin-bottom:12px}
+.afi input{width:100%;height:52px;border:1.4px solid #e6dad3;border-radius:13px;padding:0 16px;font:inherit;font-size:15px;outline:0;transition:border-color .25s,box-shadow .25s}.afi input:focus{border-color:var(--ink);box-shadow:0 8px 24px rgba(120,80,70,.12)}
+.apb{width:100%;height:52px;border-radius:26px;background:#000;color:#fff;font-weight:600;font-size:15px;transition:transform .3s var(--out)}.apb:hover{transform:scale(1.02)}
+.alk{font-size:13px;color:var(--mu);text-decoration:underline;display:inline-block;margin-top:14px}.alk:hover{color:var(--ink)}
+.aer{color:#d23b4d;font-size:13px;min-height:18px;margin-bottom:8px}.aok{color:#2fa66a;font-size:14px;line-height:1.5;margin-top:4px}
+.ant{font-size:11.5px;color:var(--lm);line-height:1.5;margin-top:18px}
+.av2{animation:avi .45s var(--out)}@keyframes avi{from{opacity:0;transform:translateY(10px)}}
+.ad{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);z-index:91;background:#fff;box-shadow:-30px 0 90px rgba(80,40,40,.25);transform:translateX(105%);transition:transform .7s var(--out);padding:84px 28px 28px;display:flex;flex-direction:column;gap:18px;overflow:auto}.ad.o{transform:none}
+.apf{display:flex;align-items:center;gap:16px}.aav{width:64px;height:64px;flex:none;border-radius:50%;background:linear-gradient(135deg,#e8a47c,#8a5a6e);color:#fff;display:grid;place-items:center;font:400 28px 'Playfair Display',serif}
+.apf b{display:block;font-size:18px}.apf span{font-size:13px;color:var(--lm)}
+.abx{border:1.4px solid #eee3dc;border-radius:18px;padding:20px}.abx h3{font:400 20px 'Playfair Display',serif;margin-bottom:8px}.abx p{font-size:14px;color:var(--mu);line-height:1.6;margin-bottom:14px}
+.abx .sa{display:inline-block}
+.arw{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-top:1px solid #f1e8e2}.arw span{color:var(--lm)}
+.aso{margin-top:auto;height:50px;border:1.4px solid var(--ink);border-radius:25px;font-weight:600;transition:background .3s,color .3s}.aso:hover{background:var(--ink);color:#fff}
+nav .pill i.u{font-size:11px;font-weight:700;color:#9a6f5d}nav.s .pill i.u{color:var(--pk)}

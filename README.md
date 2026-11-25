@@ -13,6 +13,7 @@
 public/            фронтенд (деплоїться як Pages)
   index.html       головна: хіро, пошук, «Рекомендовані оселі», сторінка оселі
   assets/css|js|img
+  assets/js/auth.js  мінімальний акаунт: вхід, реєстрація, вхід за посиланням, соцвходи (демо-заглушка)
 wrangler.toml      конфіг Cloudflare Pages
 ```
 Локальний запуск: `npx wrangler pages dev public` або будь-який статичний сервер на `public/`.

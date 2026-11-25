@@ -6,7 +6,8 @@
     "db:create": "wrangler d1 create booking-app",
     "db:migrate:local": "wrangler d1 migrations apply booking-app --local",
     "db:migrate:remote": "wrangler d1 migrations apply booking-app --remote",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "deploy:sync": "wrangler deploy --config workers/ical-sync/wrangler.toml"
   },
   "devDependencies": {
     "wrangler": "^4.0.0",

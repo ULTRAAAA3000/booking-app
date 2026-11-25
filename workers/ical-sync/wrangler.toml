@@ -1,0 +1,12 @@
+name = "booking-app-ical-sync"
+main = "src/index.ts"
+compatibility_date = "2026-11-01"
+
+[triggers]
+crons = ["*/15 * * * *"]
+
+# Та сама база D1, що й у Pages: розкоментуйте й підставте database_id.
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "booking-app"
+# database_id = "ВАШ_DATABASE_ID"

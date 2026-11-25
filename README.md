@@ -19,6 +19,8 @@ public/            фронтенд (деплоїться як Pages)
   assets/js/auth.js  мінімальний акаунт: вхід, реєстрація, вхід за посиланням, соцвходи (демо-заглушка)
 wrangler.toml      конфіг Cloudflare Pages (+ закоментований біндинг D1)
 functions/         Cloudflare Pages Functions (TypeScript): /api/auth/*, /api/availability, /api/bookings
+workers/ical-sync/ Worker із cron для імпорту календарів booking.com
+docs/              інструкції (синхронізація з booking.com)
 migrations/        схема бази D1
   0001_init.sql          користувачі, сесії, оселі, фото, броні, доступність, відгуки, обране, аудит
   0002_seed_demo.sql     8 демо-осель із лендингу
@@ -61,6 +63,7 @@ npm run db:migrate:remote    # база на Cloudflare
 | POST | `/api/auth/register`, `/api/auth/login`, `/api/auth/logout` | e-mail + пароль, сесія в HttpOnly-cookie |
 | GET | `/api/properties?region&type&guests&min&max&in&out&q&sort&limit&offset` | каталог осель з фільтрами та вільними датами |
 | GET | `/api/properties/:slug` | повна картка оселі: опис, фото, зручності, рейтинг |
+| GET | `/api/ical/:slug.ics?t=токен` | наш календар для booking.com (без персональних даних) |
 | GET | `/api/availability?slug&in&out&guests` | дані оселі, чи вільні дати, сума |
 | GET | `/api/availability?slug&busy=1` | зайняті періоди для календаря на сторінці оселі |
 | POST | `/api/bookings` | створити бронювання (з акаунтом або без) |
@@ -85,3 +88,6 @@ npm run db:migrate:remote    # база на Cloudflare
 
 ## Сторінка оселі
 Відкривається з головної або каталогу за адресою `index.html#stay=slug`. Дати вибираються в календарі на картці бронювання (зайняті дні вимкнені), обрані дати передаються у форму `book.html`.
+
+## Синхронізація з booking.com
+Інструкція: [`docs/booking-com-sync.md`](docs/booking-com-sync.md). Кроки: зв'язок у `channel_links` → наше `.ics`-посилання у Booking → `npm run deploy:sync`.

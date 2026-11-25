@@ -85,3 +85,13 @@ export async function isFree(env: Env, id: number, a: string, b: string) {
     UNION ALL SELECT 1 FROM availability_blocks WHERE property_id=?1 AND start_date<?3 AND end_date>?2 LIMIT 1`).bind(id, a, b).first();
   return !r;
 }
+
+// ---- допоміжне для кабінету ----
+export async function sessionHash(env: Env, req: Request) { const t = sid(req); return t ? hmac(env.SESSION_SECRET, t) : null; }
+export const expiredCookie = (req: Request) => `sid=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure(req)}`;
+export async function needUser(env: Env, req: Request, mutating = false): Promise<{ user: User; res?: undefined } | { user?: undefined; res: Response }> {
+  const bad = ready(env); if (bad) return { res: bad };
+  if (mutating && !sameOrigin(req)) return { res: fail('forbidden', 403) };
+  const user = await currentUser(env, req);
+  return user ? { user } : { res: fail('unauthorized', 401) };
+}

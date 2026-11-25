@@ -19,6 +19,12 @@ const MON=["січ","лют","бер","кві","тра","чер","лип","се�
 const SLUGS=["grazhda-nad-cheremoshem","khata-hutsula","shale-hoverla","lisova-koliba","kotedzh-smereka","polonynska-sadyba","vila-synevyr","karpatska-veranda"];
 const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 const bookUrl=(i,a,b,g)=>"book.html?house="+SLUGS[i]+(a&&b?"&in="+ymd(a)+"&out="+ymd(b):"")+"&guests="+g;
+const favs=new Set();
+const markFavs=()=>document.querySelectorAll(".cd").forEach(c=>{const h=c.querySelector(".hb");if(h)h.classList.toggle("l",favs.has(SLUGS[+c.dataset.i]))});
+async function favToggle(btn,i){if(!window.Auth||!Auth.get()){window.Auth&&Auth.open("in");return}const on=!favs.has(SLUGS[i]);btn.classList.toggle("l",on);
+try{const r=await fetch("/api/favorites",{method:"POST",credentials:"same-origin",headers:{"content-type":"application/json"},body:JSON.stringify({slug:SLUGS[i],on})});if(!r.ok)throw 0;on?favs.add(SLUGS[i]):favs.delete(SLUGS[i])}catch(e){btn.classList.toggle("l",!on)}}
+async function favSync(u){favs.clear();if(u){try{const r=await fetch("/api/favorites",{credentials:"same-origin"});if(r.ok)(await r.json()).favorites.forEach(f=>favs.add(f.slug))}catch(e){}}markFavs()}
+addEventListener("auth:change",e=>favSync(e.detail));
 const heart='<svg viewBox="0 0 24 24"><path d="M12 21s-8-5.5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.5-8 11-8 11z"/></svg>';
 let cur=0,busy=false,timer;
 /* hero build */
@@ -66,7 +72,7 @@ $$(".pop").forEach(p=>p.onclick=e=>e.stopPropagation());addEventListener("click"
 $("#go").onclick=()=>$("#stays").scrollIntoView({behavior:"smooth"});gR();
 /* cards */
 const card=(i,c,sim)=>{const h=H[i];return`<div class="cd" data-i="${i}" style="--c:${c}"><div class="im" style="${bg(img('cards',i,i*7+5,i))}"></div><div class="pr">${h[2]} ₴<em>/ніч</em></div><button class="hb">${heart}</button><button class="bi" aria-label="Забронювати"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M9.5 15l2 2 3.5-4"/></svg></button><div class="ci"><b>${h[0]}</b><div><svg class="ic" viewBox="0 0 24 24" style="width:12px"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/></svg>${h[1]}, Карпати</div><div><span class="stars">★★★★★</span>4,8</div></div></div>`};
-function bindCards(root){root.querySelectorAll(".cd").forEach(c=>{c.onclick=e=>{if(e.target.closest(".bi")){e.stopPropagation();location.href=bookUrl(+c.dataset.i,ci,co,ad+kd);return}if(e.target.closest(".hb")){e.target.closest(".hb").classList.toggle("l");e.stopPropagation();return}openD(+c.dataset.i,c)}});
+function bindCards(root){root.querySelectorAll(".cd").forEach(c=>{c.onclick=e=>{if(e.target.closest(".bi")){e.stopPropagation();location.href=bookUrl(+c.dataset.i,ci,co,ad+kd);return}if(e.target.closest(".hb")){e.stopPropagation();favToggle(e.target.closest(".hb"),+c.dataset.i);return}openD(+c.dataset.i,c)}});
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("v");io.unobserve(e.target)}}),{threshold:.15});root.querySelectorAll(".cd").forEach(c=>io.observe(c))}
 $("#gd").innerHTML=H.map((_,i)=>card(i,i%4)).join("");bindCards($("#gd"));
 /* detail */
@@ -80,7 +86,7 @@ w.innerHTML=`<div class="bc rs" style="--k:0"><a href="#" onclick="home();return
 <div class="rt rs" style="--k:5"><b style="font-size:20px">4,8</b><span style="color:var(--lm)">(128 відгуків)</span><span class="stars">★★★★★</span><div class="ov"><i></i><i></i><i></i></div><button class="rn">Оцінити</button></div>
 <div class="rs" style="--k:6"><h3 class="ser" style="margin-top:22px">Зручності</h3><div class="am">${Object.entries(ics).map(([n,p])=>`<div><svg class="ic" viewBox="0 0 24 24">${p}</svg>${n}</div>`).join("")}</div></div></div></div>
 <div class="sim rs" style="--k:7"><h2 class="ser">Схожі оселі</h2><div class="grid" id="sg2">${[1,2,3,4].map((k,c)=>card((i+k)%8,c)).join("")}</div></div>`;
-bindCards($("#sg2"));
+bindCards($("#sg2"));markFavs();
 const G=[img('cards',i,i*7+5,i),...[0,1,2].map(k=>img('interior',k,i*3+k+40,i+k+1))];let gi=0;const mm=$("#mi .mm");
 const tms=()=>{$("#tm").innerHTML=[0,1,2,3].filter(k=>k!=gi).map((k,j)=>`<div class="${j==2?'m':''}" style="${bg(G[k])}" onclick="sel(${k})"></div>`).join("")};
 window.sel=n=>{if(n==gi)return;gi=n;mm.style.opacity=0;setTimeout(()=>{mm.style.backgroundImage=`url(${G[gi]})`;mm.style.opacity=1;tms()},170)};

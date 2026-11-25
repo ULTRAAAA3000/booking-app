@@ -1,4 +1,4 @@
-import { Env, json, fail, ready, sameOrigin, body, str, EMAIL, PHONE, currentUser, getProperty, checkStay, nights } from '../_lib/core';
+import { Env, json, fail, ready, sameOrigin, body, str, EMAIL, PHONE, currentUser, getProperty, checkStay, nights, kyivToday } from '../_lib/core';
 
 // Створення бронювання: працює і для гостя без акаунта, і для користувача з сесією (тоді бронь прив'язується до акаунта).
 export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
@@ -30,7 +30,13 @@ export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
   const bad = ready(env); if (bad) return bad;
   const user = await currentUser(env, request);
   if (!user) return fail('unauthorized', 401);
-  const { results } = await env.DB.prepare(`SELECT substr(upper(b.id),1,8) AS ref,p.title,p.slug,b.check_in,b.check_out,b.guests,b.total_minor,b.currency,b.status,b.created_at
-    FROM bookings b JOIN properties p ON p.id=b.property_id WHERE b.user_id=? ORDER BY b.created_at DESC LIMIT 50`).bind(user.id).all();
-  return json({ bookings: results });
+  const today = kyivToday();
+  const { results } = await env.DB.prepare(`SELECT b.id,substr(upper(b.id),1,8) AS ref,p.title,p.slug,b.check_in,b.check_out,b.guests,b.total_minor,b.currency,b.status,b.created_at,
+    COALESCE((SELECT url FROM property_photos WHERE property_id=p.id ORDER BY is_cover DESC,sort_order LIMIT 1),'') AS cover,
+    EXISTS(SELECT 1 FROM reviews r WHERE r.booking_id=b.id) AS reviewed
+    FROM bookings b JOIN properties p ON p.id=b.property_id WHERE b.user_id=? ORDER BY b.check_in DESC LIMIT 100`).bind(user.id).all<Record<string, unknown> & { status: string; check_in: string; check_out: string; reviewed: number }>();
+  const bookings = results.map((b) => ({ ...b,
+    can_cancel: (b.status === 'confirmed' || b.status === 'pending') && b.check_in > today,
+    can_review: (b.status === 'confirmed' || b.status === 'completed') && b.check_out <= today && !b.reviewed }));
+  return json({ bookings });
 };

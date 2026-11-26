@@ -124,3 +124,5 @@ background:radial-gradient(ellipse 20% 28% at 10% 85%,#fff,transparent 70%),radi
 
 .bk{position:relative}.dg button{padding:12px 14px;text-align:left;font-size:13px;border-radius:12px;transition:background .25s,box-shadow .25s}.dg button:hover{background:#fff;box-shadow:0 6px 18px rgba(120,80,70,.12)}.dg button span{display:block}
 .dsm .r{display:flex;justify-content:space-between;font-size:14px;padding:2px 4px 14px}#dcal{top:152px;left:22px;right:auto;width:274px}
+
+a{color:inherit;text-decoration:none}

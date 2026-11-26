@@ -1,6 +1,6 @@
 /* Акаунт: реальний вхід через /api/auth (e-mail + пароль). Соцмережі й вхід за посиланням — підключимо пізніше. */
 (()=>{
-const q=s=>document.querySelector(s),SOC=[["Google","G","#ea4335"],["Apple","A","#111"],["Facebook","f","#1877f2"],["Telegram","T","#27a7e7"]];
+const q=s=>document.querySelector(s),SOC=[["Google","G","#ea4335"],["Telegram","T","#27a7e7"]];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const MON=["січ","лют","бер","кві","тра","чер","лип","сер","вер","жов","лис","гру"];
 const fd=s=>{const d=new Date(s+"T00:00:00");return d.getDate()+" "+MON[d.getMonth()]+" "+d.getFullYear()};
@@ -11,7 +11,7 @@ let user=null,loaded=false,view="in";const subs=[];
 document.body.insertAdjacentHTML("beforeend",'<div class="au" id="au"><div class="ac" role="dialog" aria-modal="true" aria-label="Вхід"><button class="ax" aria-label="Закрити">×</button><div id="ab"></div></div></div><aside class="ad" id="ad" aria-label="Акаунт"><button class="ax" aria-label="Закрити">×</button><div id="adb" style="display:contents"></div></aside>');
 const au=q("#au"),ad=q("#ad"),pill=q("nav .pill"),pi=pill.querySelector("i"),ico=pi.innerHTML;
 const lock=()=>{document.documentElement.style.overflow=(au.classList.contains("o")||ad.classList.contains("o"))?"hidden":""};
-const soc=()=>`<div class="asb">${SOC.map(s=>`<button type="button" data-s="${s[0]}"><b style="background:${s[2]}">${s[1]}</b>${s[0]}</button>`).join("")}</div><div class="aer" id="asm" style="margin-top:10px"></div>`;
+const soc=()=>`<div class="asb">${SOC.map(s=>`<button type="button" disabled><b style="background:${s[2]}">${s[1]}</b>${s[0]}<em>скоро</em></button>`).join("")}</div>`;
 const fld=(t,n,p,a)=>`<label class="afi"><input type="${t}" name="${n}" placeholder="${p}" autocomplete="${a}"></label>`;
 function render(){const b=q("#ab");let h="";
 if(view=="magic")h=`<h2 class="ah av2">Вхід за посиланням</h2><p class="as av2">Надішлемо на пошту посилання без пароля.</p><form class="av2" data-f="magic">${fld("email","email","Ваш e-mail","email")}<div class="aer"></div><button class="apb">Надіслати посилання</button></form><a href="#" class="alk" data-v="in">← Назад до входу</a>`;

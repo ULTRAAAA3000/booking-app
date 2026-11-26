@@ -26,4 +26,6 @@
 .abx .sa{display:inline-block}
 .arw{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-top:1px solid #f1e8e2}.arw span{color:var(--lm)}
 .aso{margin-top:auto;height:50px;border:1.4px solid var(--ink);border-radius:25px;font-weight:600;transition:background .3s,color .3s}.aso:hover{background:var(--ink);color:#fff}
-nav .pill i.u{font-size:11px;font-weight:700;color:#9a6f5d}nav.s .pill i.u{color:var(--pk)}
+nav .pill i.u{font-size:11px;font-weight:700;background:#fff;color:#4a3442}nav.s .pill i.u{background:var(--ink);color:#fff}
+.asb button:disabled{opacity:.65;cursor:not-allowed}.asb button:disabled:hover{background:#fff;border-color:#e6dad3;transform:none}
+.asb em{font-style:normal;font-size:10.5px;background:#f3e6dd;color:var(--mu);padding:2px 8px;border-radius:9px}

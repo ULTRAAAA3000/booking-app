@@ -12,7 +12,7 @@ const img=(k,i,seed,pi)=>PHOTOS[k]&&PHOTOS[k][i]||scene(seed,pi);
 const bg=u=>`background-image:url(${u})`;
 const SL=[{t:["ЛАСКАВО ПРОСИМО","В КАРПАТИ"],cl:"",pos:"center 62%",th:2,h:"Відкрий Карпати",d:"Найкращі оселі та місця відпочинку в Карпатах. Знайдіть ту, що підійде вам і вашій родині"},
 {t:["ЗНАЙДИ СВІЙ","ДІМ У ГОРАХ"],cl:"",pos:"center 55%",th:1,h:"Де зупинитись",d:"Дерев'яні ґражди, затишні шале та тихі садиби серед смерек — підібрані для вас"},
-{t:["ВІДКРИЙ","КАРПАТИ"],cl:"l3",pos:"center 40%",th:0,h:"Куди поїхати",d:"Полонини, озера та водоспади очима найкращих гуцульських господарів"}];
+{t:["ВІДКРИЙ","КАРПАТИ"],cl:"l3",pos:"center 40%",th:0,h:"Куди поїхати",d:"Полонини, озера та водоспади Карпат"}];
 const TH=[{s:11,p:3},{s:12,p:4},{s:13,p:2}];
 const H=[["Ґражда над Черемошем","Верховина","5 200"],["Хата гуцула","Косів","3 400"],["Шале «Говерла»","Ворохта","6 800"],["Лісова колиба","Яремче","2 100"],["Котедж «Смерека»","Буковель","4 600"],["Полонинська садиба","Рахів","2 900"],["Вілла «Синевир»","Міжгір'я","7 500"],["Карпатська веранда","Славське","3 800"]];
 const MON=["січ","лют","бер","кві","тра","чер","лип","сер","вер","жов","лис","гру"],MF=["Січень","Лютий","Березень","Квітень","Травень","Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"];
@@ -83,7 +83,7 @@ const ics={"Wi-Fi":'<path d="M3 9a14 14 0 0 1 18 0M6 12.5a9 9 0 0 1 12 0M9 16a4 
 function openD(i,from){const h=H[i],d=$("#det"),w=$("#dw"),r=from&&!d.classList.contains("o")?from.querySelector(".im").getBoundingClientRect():null,pc=(k)=>`${bg(img('cards',i,i*7+5,i))}`;
 const fd=x=>x.getDate()+" "+MON[x.getMonth()]+" "+x.getFullYear();let gs=ad+kd,dci=ci,dco=co;
 w.innerHTML=`<div class="bc rs" style="--k:0"><a href="#" onclick="home();return false">Головна</a> › Типи осель › Садиби › <span>${h[0]}, ${h[1]}</span></div><div class="cols"><div><div id="mi" style="${r?'visibility:hidden':''}"><div class="mm"></div><button class="gn p" aria-label="Назад" onclick="gs(-1)">‹</button><button class="gn n" aria-label="Далі" onclick="gs(1)">›</button><button class="hb">${heart}</button></div><div class="tm rs" style="--k:2" id="tm"></div></div>
-<div><h1 class="ser dn rs" style="--k:1">${h[0]}</h1><div class="ho rs" style="--k:2">Господар <span class="av"></span> <b id="dho" style="color:var(--ink)">Оксана Ковальчук</b></div><h3 class="ser rs" style="--k:3">Про оселю «${h[0]}»</h3>
+<div><h1 class="ser dn rs" style="--k:1">${h[0]}</h1><h3 class="ser rs" style="--k:3">Про оселю «${h[0]}»</h3>
 <p class="ab rs" id="dab" style="--k:3">Затишна оселя в мальовничому куточку: ${h[1]}. Неподалік — полонини, гірські потічки та стежки до водоспадів. Вечорами — тераса з видом на смереки, піч, дерев'яні балки та гуцульські ліжники. До найближчого лісу — п'ять хвилин пішки.</p>
 <div class="bk rs" style="--k:4"><div class="p">${h[2]} ₴<small>/ніч</small></div><div class="dg"><button type="button" id="dgi"><b>Заїзд</b><span>Додати дату</span></button><button type="button" id="dgo"><b>Виїзд</b><span>Додати дату</span></button></div><div class="pop" id="dcal"></div><div class="dsm" id="dsm"></div><div class="gr">Гості<div class="st"><button onclick="bg2(-1)">−</button><b id="bgn">${gs}</b><button onclick="bg2(1)">+</button></div></div><button id="bn">Забронювати</button></div>
 <div class="rt rs" style="--k:5"><b id="drt" style="font-size:20px">4,8</b><span id="drc" style="color:var(--lm)">(128 відгуків)</span><span class="stars">★★★★★</span><div class="ov"><i></i><i></i><i></i></div><button class="rn">Оцінити</button></div>
@@ -107,7 +107,7 @@ d.onclick=ev=>{if(!ev.target.closest("#dcal,#dgi,#dgo"))dcal.classList.remove("o
 $("#bn").onclick=()=>{if(!dci||!dco){dstep=dci?1:0;dcal.classList.add("o");dcR();return}location.href=bookUrl(i,dci,dco,gs)};
 window.bg2=v=>{gs=Math.max(1,Math.min(maxg,gs+v));$("#bgn").textContent=gs};dsum();
 fetch("/api/availability?busy=1&slug="+SLUGS[i],{credentials:"same-origin"}).then(r=>r.ok?r.json():null).then(j=>{if(!j||!j.busy)return;busy=j.busy.map(x=>[x.from,x.to]);if(dci&&dco&&hit(dci,dco)){dci=dco=null;dsum();$("#dsm").innerHTML='<div class="r" style="color:#d23b4d">Обрані дати вже зайняті, оберіть інші</div>'}if(dcal.classList.contains("o"))dcR()}).catch(()=>{});
-fetch("/api/properties/"+SLUGS[i]).then(r=>r.ok?r.json():null).then(j=>{if(!j)return;const p=j.property;if(p.description)$("#dab").textContent=p.description;if(p.host_name)$("#dho").textContent=p.host_name;$("#drt").textContent=String(p.rating_avg).replace(".",",");$("#drc").textContent="("+p.rating_count+" відгуків)";maxg=p.max_guests;if(gs>maxg){gs=maxg;$("#bgn").textContent=gs}
+fetch("/api/properties/"+SLUGS[i]).then(r=>r.ok?r.json():null).then(j=>{if(!j)return;const p=j.property;if(p.description)$("#dab").textContent=p.description;$("#drt").textContent=String(p.rating_avg).replace(".",",");$("#drc").textContent="("+p.rating_count+" відгуків)";maxg=p.max_guests;if(gs>maxg){gs=maxg;$("#bgn").textContent=gs}
 (j.photos||[]).slice(1,4).forEach((ph,k)=>{if(ph.url)G[k+1]=ph.url});tms();if(j.amenities&&j.amenities.length)$("#dam").innerHTML=j.amenities.map(n=>`<div><svg class="ic" viewBox="0 0 24 24">${ics[n]||""}</svg>${n}</div>`).join("")}).catch(()=>{});
 history.replaceState(null,"","#stay="+SLUGS[i]);
 d.scrollTop=0;requestAnimationFrame(()=>{d.classList.add("o");$("#nav").classList.add("s");if(!r)return;

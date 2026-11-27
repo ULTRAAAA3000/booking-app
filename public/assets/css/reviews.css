@@ -1,0 +1,22 @@
+.rvs{margin-top:64px}.rvs>h2{font-size:clamp(26px,2.45vw,36px)}
+.rvh{display:flex;align-items:baseline;gap:14px;margin:8px 0 22px;flex-wrap:wrap}.rvh b{font:400 46px 'Playfair Display',serif}.rvh .stars{color:#f7c325;letter-spacing:2px}.rvh span{color:var(--mu);font-size:14px}
+.rvg{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;align-items:start}
+.rvl{display:flex;flex-direction:column;gap:14px}
+.rvi{background:#fff;border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(110,60,50,.08);animation:avi .5s var(--out)}
+.rvi .top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.rvi .av3{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#e8a47c,#8a5a6e);color:#fff;display:grid;place-items:center;font:400 18px 'Playfair Display',serif;flex:none}
+.rvi b{display:block;font-size:15px}.rvi small{color:var(--lm);font-size:12.5px}
+.rvi .stars{color:#f7c325;margin-left:auto;white-space:nowrap}
+.rvi p{font-size:14.5px;line-height:1.65;color:var(--mu);white-space:pre-line;word-break:break-word}
+.rvi .vf{display:inline-block;margin-top:10px;font-size:12px;font-weight:600;color:#1f7a4d;background:#e4f4ec;padding:4px 10px;border-radius:12px}
+.rve{color:var(--mu);font-size:14.5px;background:#fff;border-radius:18px;padding:22px;box-shadow:0 10px 30px rgba(110,60,50,.08)}
+.rvf{background:#fff;border-radius:22px;padding:24px;box-shadow:0 12px 36px rgba(110,60,50,.1);position:sticky;top:96px}
+.rvf h3{font:400 22px 'Playfair Display',serif;margin-bottom:6px}.rvf .as2{font-size:13.5px;color:var(--mu);margin-bottom:14px;line-height:1.5}
+.rvz{display:flex;gap:4px;margin:4px 0 12px}.rvz button{font-size:32px;line-height:1;color:#e0d4cc;transition:color .2s,transform .25s var(--out)}.rvz button.on{color:#f7c325}.rvz button:hover{transform:scale(1.15)}
+.rvf .afi input,.rvf textarea{width:100%;border:1.4px solid #e6dad3;border-radius:13px;font:inherit;font-size:15px;outline:0;transition:border-color .25s,box-shadow .25s}
+.rvf .afi input{height:50px;padding:0 14px}.rvf textarea{min-height:110px;padding:13px 14px;resize:vertical;margin-bottom:10px}
+.rvf textarea:focus{border-color:var(--ink);box-shadow:0 8px 24px rgba(120,80,70,.12)}
+.rvf .who{font-size:14px;margin-bottom:12px}.rvf .who b{font-weight:600}
+.rvok{color:#1f7a4d;font-size:14px;line-height:1.5;margin-top:10px}
+@media(max-width:900px){.rvg{grid-template-columns:1fr}.rvf{position:static}}
+.rvf [hidden]{display:none!important}

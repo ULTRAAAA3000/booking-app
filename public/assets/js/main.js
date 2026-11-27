@@ -71,13 +71,14 @@ $$(".f").forEach(f=>f.onclick=e=>{e.stopPropagation();$$(".f").forEach(x=>x.clas
 $$(".pop").forEach(p=>p.onclick=e=>e.stopPropagation());addEventListener("click",()=>$$(".pop").forEach(p=>p.classList.remove("o")));
 $("#go").onclick=()=>{const q=new URLSearchParams();if(ci&&co){q.set("in",ymd(ci));q.set("out",ymd(co))}q.set("guests",ad+kd);location.href="stays.html?"+q};gR();
 /* cards */
-const card=(i,c,sim)=>{const h=H[i];return`<div class="cd" data-i="${i}" style="--c:${c}"><div class="im" style="${bg(img('cards',i,i*7+5,i))}"></div><div class="pr">${h[2]} ₴<em>/ніч</em></div><button class="hb">${heart}</button><button class="bi" aria-label="Забронювати"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M9.5 15l2 2 3.5-4"/></svg></button><div class="ci"><b>${h[0]}</b><div><svg class="ic" viewBox="0 0 24 24" style="width:12px"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/></svg>${h[1]}<span class="kk">, Карпати</span></div><div><span class="stars">★★★★★</span>4,8</div></div></div>`};
+const card=(i,c,sim)=>{const h=H[i];return`<div class="cd" data-i="${i}" style="--c:${c}"><div class="im" style="${bg(img('cards',i,i*7+5,i))}"></div><div class="pr">${h[2]} ₴<em>/ніч</em></div><button class="hb">${heart}</button><button class="bi" aria-label="Забронювати"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M9.5 15l2 2 3.5-4"/></svg></button><div class="ci"><b>${h[0]}</b><div><svg class="ic" viewBox="0 0 24 24" style="width:12px"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/></svg>${h[1]}<span class="kk">, Карпати</span></div><div>${rt(i)}</div></div></div>`};
 function bindCards(root){root.querySelectorAll(".cd").forEach(c=>{c.onclick=e=>{if(e.target.closest(".bi")){e.stopPropagation();location.href=bookUrl(+c.dataset.i,ci,co,ad+kd);return}if(e.target.closest(".hb")){e.stopPropagation();favToggle(e.target.closest(".hb"),+c.dataset.i);return}openD(+c.dataset.i,c)}});
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("v");io.unobserve(e.target)}}),{threshold:.15});root.querySelectorAll(".cd").forEach(c=>io.observe(c))}
-const D=[];$("#gd").innerHTML=H.map((_,i)=>card(i,i%4)).join("");bindCards($("#gd"));
+const D=[];const rt=i=>D[i]&&D[i].rating_count?'<span class="stars">★★★★★</span>'+String(D[i].rating_avg).replace(".",","):(D[i]?"Ще без відгуків":"");
+$("#gd").innerHTML=H.map((_,i)=>card(i,i%4)).join("");bindCards($("#gd"));
 (async()=>{try{const r=await fetch("/api/properties?limit=24");if(!r.ok)throw 0;const j=await r.json();if(!j.items||!j.items.length)throw 0;
 const same=j.items.length==SLUGS.length&&j.items.every((it,k)=>it.slug==SLUGS[k]&&it.cover==PHOTOS.cards[k]);D.length=0;j.items.forEach(it=>D.push(it));
-if(!same){H.length=0;SLUGS.length=0;PHOTOS.cards=[];j.items.forEach(it=>{H.push([it.title,it.region,Math.round(it.price_minor/100).toLocaleString("uk-UA")]);SLUGS.push(it.slug);PHOTOS.cards.push(it.cover)});$("#gd").innerHTML=H.slice(0,8).map((_,k)=>card(k,k%4)).join("");bindCards($("#gd"));markFavs()}}catch(e){}openHash()})();
+if(!same){H.length=0;SLUGS.length=0;PHOTOS.cards=[];j.items.forEach(it=>{H.push([it.title,it.region,Math.round(it.price_minor/100).toLocaleString("uk-UA")]);SLUGS.push(it.slug);PHOTOS.cards.push(it.cover)});$("#gd").innerHTML=H.slice(0,8).map((_,k)=>card(k,k%4)).join("");bindCards($("#gd"));markFavs()}else{document.querySelectorAll("#gd .cd").forEach(c=>{const x=c.querySelector(".ci > div:last-child");if(x)x.innerHTML=rt(+c.dataset.i)})}}catch(e){}openHash()})();
 /* detail */
 const ics={"Wi-Fi":'<path d="M3 9a14 14 0 0 1 18 0M6 12.5a9 9 0 0 1 12 0M9 16a4 4 0 0 1 6 0"/><circle cx="12" cy="19" r=".8"/>',"Міні-бар":'<path d="M8 3h8l-1 7a3 3 0 0 1-6 0zM12 13v8M8 21h8"/>',"Власна купіль":'<path d="M3 12h18v3a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5zM6 12V6a2 2 0 0 1 4 0"/>',"Суперхост":'<path d="m12 3 2.7 5.5 6 .9-4.4 4.2 1 6-5.3-2.8-5.3 2.8 1-6L3.3 9.4l6-.9z"/>',"Кінозал":'<rect x="3" y="5" width="18" height="13" rx="2"/><path d="m10 9 5 3-5 3z"/>',"Сервіс у номер":'<path d="M3 17h18M5 17a7 7 0 0 1 14 0M12 8V6"/>'};
 function openD(i,from){const h=H[i],d=$("#det"),w=$("#dw"),r=from&&!d.classList.contains("o")?from.querySelector(".im").getBoundingClientRect():null,pc=(k)=>`${bg(img('cards',i,i*7+5,i))}`;
@@ -86,8 +87,9 @@ w.innerHTML=`<div class="bc rs" style="--k:0"><a href="#" onclick="home();return
 <div><h1 class="ser dn rs" style="--k:1">${h[0]}</h1><h3 class="ser rs" style="--k:3">Про оселю «${h[0]}»</h3>
 <p class="ab rs" id="dab" style="--k:3">Затишна оселя в мальовничому куточку: ${h[1]}. Неподалік — полонини, гірські потічки та стежки до водоспадів. Вечорами — тераса з видом на смереки, піч, дерев'яні балки та гуцульські ліжники. До найближчого лісу — п'ять хвилин пішки.</p>
 <div class="bk rs" style="--k:4"><div class="p">${h[2]} ₴<small>/ніч</small></div><div class="dg"><button type="button" id="dgi"><b>Заїзд</b><span>Додати дату</span></button><button type="button" id="dgo"><b>Виїзд</b><span>Додати дату</span></button></div><div class="pop" id="dcal"></div><div class="dsm" id="dsm"></div><div class="gr">Гості<div class="st"><button onclick="bg2(-1)">−</button><b id="bgn">${gs}</b><button onclick="bg2(1)">+</button></div></div><button id="bn">Забронювати</button></div>
-<div class="rt rs" style="--k:5"><b id="drt" style="font-size:20px">4,8</b><span id="drc" style="color:var(--lm)">(128 відгуків)</span><span class="stars">★★★★★</span><div class="ov"><i></i><i></i><i></i></div><button class="rn">Оцінити</button></div>
+<div class="rt rs" style="--k:5"><b id="drt" style="font-size:20px">—</b><span id="drc" style="color:var(--lm)"></span><span class="stars" id="drs" hidden>★★★★★</span><button class="rn" id="drgo">Залишити відгук</button></div>
 <div class="rs" style="--k:6"><h3 class="ser" style="margin-top:22px">Зручності</h3><div class="am" id="dam">${Object.entries(ics).map(([n,p])=>`<div><svg class="ic" viewBox="0 0 24 24">${p}</svg>${n}</div>`).join("")}</div></div></div></div>
+<div class="rvs rs" style="--k:7" id="drv"></div>
 <div class="sim rs" style="--k:7"><h2 class="ser">Схожі оселі</h2><div class="grid" id="sg2">${[1,2,3,4].map((k,c)=>card((i+k)%H.length,c)).join("")}</div></div>`;
 bindCards($("#sg2"));markFavs();
 const G=[img('cards',i,i*7+5,i),...[0,1,2].map(k=>img('interior',k,i*3+k+40,i+k+1))];let gi=0;const mm=$("#mi .mm");
@@ -106,8 +108,9 @@ $("#dgi").onclick=e=>{e.stopPropagation();dstep=0;dcal.classList.add("o");dcR()}
 d.onclick=ev=>{if(!ev.target.closest("#dcal,#dgi,#dgo"))dcal.classList.remove("o")};
 $("#bn").onclick=()=>{if(!dci||!dco){dstep=dci?1:0;dcal.classList.add("o");dcR();return}location.href=bookUrl(i,dci,dco,gs)};
 window.bg2=v=>{gs=Math.max(1,Math.min(maxg,gs+v));$("#bgn").textContent=gs};dsum();
+window.mountReviews&&mountReviews($("#drv"),SLUGS[i]);$("#drgo").onclick=()=>$("#drv").scrollIntoView({behavior:"smooth",block:"start"});
 fetch("/api/availability?busy=1&slug="+SLUGS[i],{credentials:"same-origin"}).then(r=>r.ok?r.json():null).then(j=>{if(!j||!j.busy)return;busy=j.busy.map(x=>[x.from,x.to]);if(dci&&dco&&hit(dci,dco)){dci=dco=null;dsum();$("#dsm").innerHTML='<div class="r" style="color:#d23b4d">Обрані дати вже зайняті, оберіть інші</div>'}if(dcal.classList.contains("o"))dcR()}).catch(()=>{});
-fetch("/api/properties/"+SLUGS[i]).then(r=>r.ok?r.json():null).then(j=>{if(!j)return;const p=j.property;if(p.description)$("#dab").textContent=p.description;$("#drt").textContent=String(p.rating_avg).replace(".",",");$("#drc").textContent="("+p.rating_count+" відгуків)";maxg=p.max_guests;if(gs>maxg){gs=maxg;$("#bgn").textContent=gs}
+fetch("/api/properties/"+SLUGS[i]).then(r=>r.ok?r.json():null).then(j=>{if(!j)return;const p=j.property;if(p.description)$("#dab").textContent=p.description;showRating(p.rating_avg,p.rating_count);maxg=p.max_guests;if(gs>maxg){gs=maxg;$("#bgn").textContent=gs}
 (j.photos||[]).slice(1,4).forEach((ph,k)=>{if(ph.url)G[k+1]=ph.url});tms();if(j.amenities&&j.amenities.length)$("#dam").innerHTML=j.amenities.map(n=>`<div><svg class="ic" viewBox="0 0 24 24">${ics[n]||""}</svg>${n}</div>`).join("")}).catch(()=>{});
 history.replaceState(null,"","#stay="+SLUGS[i]);
 d.scrollTop=0;requestAnimationFrame(()=>{d.classList.add("o");$("#nav").classList.add("s");if(!r)return;
@@ -116,6 +119,7 @@ const t0=performance.now();(function s(n){let t=Math.min(1,(n-t0)/900),e=t<.5?4*
 f.style.left=L("left")+"px";f.style.top=L("top")+"px";f.style.width=L("width")+"px";f.style.height=L("height")+"px";f.style.borderRadius=(12-2*e)+"px";
 if(t<1)requestAnimationFrame(s);else{$("#mi").style.visibility="visible";f.style.display="none"}})(t0)})}
 function home(){$("#det").classList.remove("o");sc();scrollTo({top:0});history.replaceState(null,"",location.pathname+location.search)}
+function showRating(avg,n){const t=document.querySelector("#drt"),c=document.querySelector("#drc"),z=document.querySelector("#drs");if(!t)return;t.textContent=n?String(avg).replace(".",","):"—";c.textContent=n?"("+n+" "+(n==1?"відгук":n<5?"відгуки":"відгуків")+")":"Ще немає відгуків";if(z)z.hidden=!n}
 function openHash(){const m=location.hash.match(/^#stay=([\w-]+)/);if(!m)return;const i=SLUGS.indexOf(m[1]);if(i>=0)openD(i)}
 addEventListener("hashchange",()=>{if(/^#stay=/.test(location.hash))openHash();else if($("#det").classList.contains("o"))home()});
 

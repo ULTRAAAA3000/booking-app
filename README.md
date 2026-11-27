@@ -59,6 +59,7 @@ npm run db:migrate:remote    # база на Cloudflare
 ## API (functions/api)
 | Метод | Шлях | Що робить |
 |---|---|---|
+| GET | `/api/config` | публічні налаштування для браузера (ключ Turnstile) |
 | GET | `/api/auth/me` | поточний користувач або `null` |
 | POST | `/api/auth/register`, `/api/auth/login`, `/api/auth/logout` | e-mail + пароль, сесія в HttpOnly-cookie |
 | GET | `/api/properties?region&type&guests&min&max&in&out&q&sort&limit&offset` | каталог осель з фільтрами та вільними датами |
@@ -91,3 +92,16 @@ npm run db:migrate:remote    # база на Cloudflare
 
 ## Синхронізація з booking.com
 Інструкція: [`docs/booking-com-sync.md`](docs/booking-com-sync.md). Кроки: зв'язок у `channel_links` → наше `.ics`-посилання у Booking → `npm run deploy:sync`.
+
+## Антибот-захист форм
+Реєстрація, вхід і бронювання проходять кілька перевірок (порядок від дешевих до дорогих):
+1. **Приманка:** приховане поле `website`; якщо його заповнили, запит відхиляється.
+2. **Час заповнення:** форма, відправлена швидше ніж за 1 с (або без поля `t`), відхиляється.
+3. **Ліміти частоти** (таблиця `rate_limits`, у ключах лише HMAC від IP / e-mail): вхід 10 / 10 хв на IP і 5 / 10 хв на e-mail, реєстрація 5 / год, бронювання 10 / год, зміна пароля й видалення акаунта 5 / 15 хв на користувача. Відповідь `429` з `Retry-After`.
+4. **Cloudflare Turnstile** (якщо задано обидва ключі): токен перевіряється на сервері; якщо Cloudflare недоступний, запит відхиляється (`503`).
+
+Налаштування Turnstile: Cloudflare Dashboard → Turnstile → Add widget → Hostnames: ваш домен `*.pages.dev` і власний домен → Mode: Managed. Далі:
+- `TURNSTILE_SITE_KEY`: публічний ключ. Додайте в `wrangler.toml` у блок `[vars]` (див. коментар у файлі): якщо проєкт Pages керується `wrangler.toml`, змінні з Dashboard не застосовуються.
+- `TURNSTILE_SECRET`: секретний ключ, **Secret**: `npx wrangler pages secret put TURNSTILE_SECRET --project-name booking-app`.
+- Обидва ключі потрібні разом; поки не задано хоч один, перевірка Turnstile вимкнена (діють пункти 1–3).
+- Нова міграція: `npm run db:migrate:remote` (`0004_rate_limits.sql`).

@@ -7,3 +7,7 @@ binding = "DB"
 database_name = "booking-app"
 database_id = "a14d3976-64a0-45ec-b762-238d796ca26a"
 migrations_dir = "migrations"
+
+# Антибот (Cloudflare Turnstile): публічний ключ віджета. Секретний ключ додається окремо як Secret (TURNSTILE_SECRET).
+# [vars]
+# TURNSTILE_SITE_KEY = "ВАШ_SITE_KEY"

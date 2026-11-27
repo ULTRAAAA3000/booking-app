@@ -5,9 +5,9 @@ const fmt=m=>(m/100).toLocaleString("uk-UA")+" ₴",MON=["січ","лют","бе
 const fd=s=>{const d=new Date(s+"T00:00:00");return d.getDate()+" "+MON[d.getMonth()]+" "+d.getFullYear()};
 const today=new Date().toLocaleDateString("sv-SE",{timeZone:"Europe/Kyiv"});
 const nextDay=s=>new Date(Date.parse(s)+864e5).toISOString().slice(0,10);
-const ER={invalid_dates:"Перевірте дати заїзду та виїзду",past_date:"Дата заїзду вже минула",min_nights:"Занадто короткий період для цієї оселі",max_nights:"Занадто довгий період",invalid_guests:"Перевірте кількість гостей",dates_unavailable:"Ці дати вже зайняті. Оберіть інші",invalid_name:"Вкажіть ім'я та прізвище",invalid_email:"Введіть коректний e-mail",invalid_phone:"Введіть коректний телефон",not_found:"Оселю не знайдено",network:"Сервер недоступний. Запустіть проєкт через npm run dev або відкрийте розгорнуту версію.",server_misconfigured:"Сервер ще не налаштований (база або SESSION_SECRET)"};
+const ER={invalid_dates:"Перевірте дати заїзду та виїзду",past_date:"Дата заїзду вже минула",min_nights:"Занадто короткий період для цієї оселі",max_nights:"Занадто довгий період",invalid_guests:"Перевірте кількість гостей",dates_unavailable:"Ці дати вже зайняті. Оберіть інші",invalid_name:"Вкажіть ім'я та прізвище",invalid_email:"Введіть коректний e-mail",invalid_phone:"Введіть коректний телефон",captcha_failed:"Не вдалося підтвердити, що ви не робот. Оновіть сторінку й спробуйте ще раз",captcha_unavailable:"Перевірка від ботів тимчасово недоступна. Спробуйте пізніше",too_many_requests:"Забагато спроб. Зачекайте кілька хвилин",too_fast:"Ви надто швидко відправили форму. Спробуйте ще раз",invalid_request:"Запит відхилено",not_found:"Оселю не знайдено",network:"Сервер недоступний. Запустіть проєкт через npm run dev або відкрийте розгорнуту версію.",server_misconfigured:"Сервер ще не налаштований (база або SESSION_SECRET)"};
 const api=async(p,body)=>{try{const r=await fetch("/api/"+p,{method:body?"POST":"GET",credentials:"same-origin",headers:{"content-type":"application/json"},body:body?JSON.stringify(body):undefined});const d=await r.json().catch(()=>({}));return{ok:r.ok,...d}}catch(e){return{ok:false,error:"network"}}};
-const root=$("#bk");let prop=null,av=null,user=null,timer=0,busy=false;
+const root=$("#bk");let prop=null,av=null,user=null,timer=0,busy=false,gd=null;
 const val=n=>{const e=$("#bf")&&$("#bf").elements[n];return e?e.value.trim():""};
 function banner(){const b=$("#bnr");if(!b)return;b.className="bnr"+(user?" ok":"");
 b.innerHTML=user?`Ви увійшли як <b>${esc(user.name)}</b>. Бронювання збережеться у вашому акаунті.`:`Увійдіть в акаунт: тоді бронювання збережеться у вашому профілі й буде в «Моїх бронюваннях». Можна й без входу, але ми радимо увійти. <button type="button" class="alk" id="bli">Увійти</button>`;
@@ -29,17 +29,17 @@ root.innerHTML=`<div class="bgr"><form class="bcard" id="bf" novalidate><div id=
 <div class="b2">${inp("name","text","Ім'я та прізвище",'autocomplete="name" maxlength="80"')}${inp("phone","tel","Телефон",'autocomplete="tel" placeholder="+380…" maxlength="20"')}</div>
 ${inp("email","email","E-mail",'autocomplete="email" maxlength="254"')}
 <label class="afi"><small>Побажання (необов'язково)</small><textarea name="note" maxlength="500"></textarea></label>
-<div class="aer" id="ber"></div><button class="apb" id="bsub">Підтвердити бронювання</button>
+${Guard.hp()}<div class="cft" id="bcf"></div><div class="aer" id="ber"></div><button class="apb" id="bsub">Підтвердити бронювання</button>
 <p class="bnt">Оплата поки не потрібна: оплату підключимо наступним етапом. Підтвердження на пошту наразі не надсилається. Після бронювання ви побачите номер замовлення.</p></form>
 <aside class="bsum"><div class="bimg" style="${p.cover?`background-image:url(${esc(p.cover)})`:""}"></div><div class="bin"><h3>${esc(p.title)}</h3><div class="rg2">${esc(p.region)}, Карпати</div><div id="bsm"></div><div class="bst" id="bst"></div></div></aside></div>`;
-const f=$("#bf");f.addEventListener("input",e=>{if(e.target.name=="in"&&e.target.value){f.elements.out.min=nextDay(e.target.value);if(f.elements.out.value&&f.elements.out.value<=e.target.value)f.elements.out.value=""}if(["in","out"].includes(e.target.name))later();$("#ber").textContent=""});
+const f=$("#bf");gd=Guard.mount($("#bcf"));f.addEventListener("input",e=>{if(e.target.name=="in"&&e.target.value){f.elements.out.min=nextDay(e.target.value);if(f.elements.out.value&&f.elements.out.value<=e.target.value)f.elements.out.value=""}if(["in","out"].includes(e.target.name))later();$("#ber").textContent=""});
 f.elements.guests.addEventListener("change",later);
 f.addEventListener("click",e=>{if(e.target.id=="bli")Auth.open("in")});f.addEventListener("submit",submit);banner();sum();check()}
 async function submit(e){e.preventDefault();const er=$("#ber");er.textContent="";
 const d={slug,in:val("in"),out:val("out"),guests:+val("guests"),name:val("name"),phone:val("phone"),email:val("email"),note:val("note")};
 if(!d.in||!d.out)return er.textContent="Оберіть дати заїзду та виїзду";
 busy=true;$("#bsub").disabled=true;$("#bsub").textContent="Опрацьовуємо…";
-const r=await api("bookings",d);busy=false;$("#bsub").textContent="Підтвердити бронювання";
+const r=await api("bookings",{...d,...await gd.fields($("#bf"))});gd.reset();busy=false;$("#bsub").textContent="Підтвердити бронювання";
 if(!r.ok){er.textContent=ER[r.error]||"Щось пішло не так. Спробуйте ще раз.";if(r.error=="dates_unavailable")check();else sum();return}
 done(r.booking)}
 function done(b){root.innerHTML=`<div class="bok"><svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="38"/><path d="M26 43l11 11 21-23"/></svg><h2>Ваше замовлення прийнято</h2><p>Номер бронювання: <b>${esc(b.ref)}</b>. Збережіть його.</p>

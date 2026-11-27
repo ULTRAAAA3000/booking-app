@@ -1,9 +1,11 @@
 import { Env, json, fail, ready, sameOrigin, body, str, EMAIL, hashPassword, startSession } from '../../_lib/core';
+import { protect } from '../../_lib/guard';
 
 export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
   const bad = ready(env); if (bad) return bad;
   if (!sameOrigin(request)) return fail('forbidden', 403);
   const b = await body(request); if (!b) return fail('invalid_body');
+  const g = await protect(env, request, b, 'register', 5, 3600); if (g) return g;
   const name = str(b, 'name'), email = str(b, 'email').toLowerCase(), pw = typeof b.password === 'string' ? b.password : '';
   if (name.length < 1 || name.length > 80) return fail('invalid_name');
   if (!EMAIL.test(email) || email.length > 254) return fail('invalid_email');

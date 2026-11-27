@@ -1,7 +1,9 @@
 import { Env, json, fail, body, needUser, verifyPassword, hashPassword, sessionHash } from '../../_lib/core';
+import { rateLimit } from '../../_lib/guard';
 
 export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
   const a = await needUser(env, request, true); if (a.res) return a.res;
+  const rl = await rateLimit(env, request, 'pw', 5, 900, a.user.id); if (rl) return rl;
   const b = await body(request); if (!b) return fail('invalid_body');
   const cur = typeof b.current === 'string' ? b.current : '', next = typeof b.next === 'string' ? b.next : '';
   if (next.length < 8 || next.length > 200) return fail('invalid_password');

@@ -1,4 +1,4 @@
-export interface Env { DB: D1Database; SESSION_SECRET: string }
+export interface Env { DB: D1Database; SESSION_SECRET: string; TURNSTILE_SECRET?: string; TURNSTILE_SITE_KEY?: string }
 export interface User { id: string; name: string; email: string; role: string }
 export interface Property { id: number; slug: string; title: string; region: string; cover: string; price_minor: number; currency: string; max_guests: number; min_nights: number; max_nights: number | null }
 
@@ -36,7 +36,7 @@ export async function verifyPassword(pw: string, stored: string | null) {
   for (let i = 0; i < got.length; i++) d |= got[i] ^ (exp[i] ?? 0);
   return d === 0 && stored !== null;
 }
-async function hmac(secret: string, msg: string) {
+export async function hmac(secret: string, msg: string) {
   const k = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
   return [...new Uint8Array(await crypto.subtle.sign('HMAC', k, enc.encode(msg)))].map((x) => x.toString(16).padStart(2, '0')).join('');
 }

@@ -1,4 +1,5 @@
 import { Env, json, fail, body, str, PHONE, needUser, verifyPassword, expiredCookie } from '../../_lib/core';
+import { rateLimit } from '../../_lib/guard';
 
 const profile = (env: Env, id: string) =>
   env.DB.prepare('SELECT id,name,email,phone,locale,notify_email,marketing_opt_in,created_at FROM users WHERE id=?').bind(id).first();
@@ -24,6 +25,7 @@ export const onRequestPatch: PagesFunction<Env> = async ({ env, request }) => {
 // Видалення акаунта: персональні дані знеособлюються, сесії й обране видаляються, історія броней залишається в базі.
 export const onRequestDelete: PagesFunction<Env> = async ({ env, request }) => {
   const a = await needUser(env, request, true); if (a.res) return a.res;
+  const rl = await rateLimit(env, request, 'del', 5, 900, a.user.id); if (rl) return rl;
   const b = await body(request); if (!b) return fail('invalid_body');
   const row = await env.DB.prepare('SELECT password_hash FROM users WHERE id=?').bind(a.user.id).first<{ password_hash: string | null }>();
   if (row?.password_hash && !(await verifyPassword(typeof b.password === 'string' ? b.password : '', row.password_hash))) return fail('invalid_credentials', 401);

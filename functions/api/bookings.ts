@@ -1,10 +1,12 @@
 import { Env, json, fail, ready, sameOrigin, body, str, EMAIL, PHONE, currentUser, getProperty, checkStay, nights, kyivToday } from '../_lib/core';
+import { protect } from '../_lib/guard';
 
 // Створення бронювання: працює і для гостя без акаунта, і для користувача з сесією (тоді бронь прив'язується до акаунта).
 export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
   const bad = ready(env); if (bad) return bad;
   if (!sameOrigin(request)) return fail('forbidden', 403);
   const b = await body(request); if (!b) return fail('invalid_body');
+  const g = await protect(env, request, b, 'booking', 10, 3600); if (g) return g;
   const name = str(b, 'name'), email = str(b, 'email').toLowerCase(), phone = str(b, 'phone'), note = str(b, 'note').slice(0, 500);
   if (name.length < 2 || name.length > 80) return fail('invalid_name');
   if (!EMAIL.test(email) || email.length > 254) return fail('invalid_email');

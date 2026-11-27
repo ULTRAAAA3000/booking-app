@@ -7,3 +7,6 @@
 .emp{grid-column:1/-1;background:#fff;border-radius:22px;padding:40px;text-align:center;box-shadow:0 12px 36px rgba(110,60,50,.1)}.emp p{color:var(--mu);margin-bottom:16px}
 .mw{text-align:center;margin-top:30px}
 @media(max-width:1000px){.sw2 .grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){.sw2 .grid{grid-template-columns:repeat(2,1fr)}.flt{position:static}}
+.ftg{display:none}
+@media(max-width:700px){.sw2{padding-top:84px}.ftg{display:flex;justify-content:space-between;align-items:center;width:100%;height:50px;padding:0 18px;border-radius:16px;background:#fff;box-shadow:0 10px 30px rgba(120,70,60,.12);font-weight:600;font-size:15px;margin-bottom:12px}
+.flt{display:none;grid-template-columns:1fr 1fr;padding:16px 16px 4px}.flt.o{display:grid}.flt .afi:first-child{grid-column:1/-1}.sw2 .grid{gap:12px}}

@@ -9,8 +9,12 @@ const EM={invalid_credentials:"Невірний e-mail або пароль",emai
 const api=async(p,body)=>{try{const r=await fetch("/api/"+p,{method:body?"POST":"GET",credentials:"same-origin",headers:{"content-type":"application/json"},body:body?JSON.stringify(body):undefined});const d=await r.json().catch(()=>({}));return{ok:r.ok,...d}}catch(e){return{ok:false,error:"network"}}};
 let user=null,loaded=false,view="in";const subs=[];
 document.body.insertAdjacentHTML("beforeend",'<div class="au" id="au"><div class="ac" role="dialog" aria-modal="true" aria-label="Вхід"><button class="ax" aria-label="Закрити">×</button><div id="ab"></div></div></div><aside class="ad" id="ad" aria-label="Акаунт"><button class="ax" aria-label="Закрити">×</button><div id="adb" style="display:contents"></div></aside>');
+const base=q("#stays")?"":"index.html";
+const LINKS=[["Оселі","stays.html"],["Куди поїхати",base+"#regions"],["Як це працює",base+"#how"],["Запитання",base+"#faq"]];
+document.body.insertAdjacentHTML("beforeend",'<div class="mnu" id="mnu" aria-hidden="true"><div class="mnh"><a class="logo" href="'+(base||"#")+'">BookingApp</a><button class="ax" aria-label="Закрити меню">×</button></div><div class="mnl" id="mnl"></div><div class="mna" id="mna"></div></div>');
+const mnu=q("#mnu"),isMob=()=>window.matchMedia&&matchMedia("(max-width:860px)").matches;
 const au=q("#au"),ad=q("#ad"),pill=q("nav .pill"),pi=pill.querySelector("i"),ico=pi.innerHTML;
-const lock=()=>{document.documentElement.style.overflow=(au.classList.contains("o")||ad.classList.contains("o"))?"hidden":""};
+const lock=()=>{document.documentElement.style.overflow=(au.classList.contains("o")||ad.classList.contains("o")||mnu.classList.contains("o"))?"hidden":""};
 const soc=()=>`<div class="asb">${SOC.map(s=>`<button type="button" disabled><b style="background:${s[2]}">${s[1]}</b>${s[0]}<em>скоро</em></button>`).join("")}</div>`;
 const fld=(t,n,p,a)=>`<label class="afi"><input type="${t}" name="${n}" placeholder="${p}" autocomplete="${a}"></label>`;
 function render(){const b=q("#ab");let h="";
@@ -22,11 +26,18 @@ q("#adb").innerHTML=user?`<div class="apf"><div class="aav">${esc(l)}</div><div>
 async function loadBookings(){const box=q("#abl");if(!box)return;const r=await api("bookings");if(!r.ok){box.innerHTML="<p>Не вдалося завантажити бронювання.</p>";return}
 box.innerHTML=r.bookings.length?r.bookings.map(b=>`<div class="arw" style="display:block"><b>${esc(b.title)}</b><br><span>${fd(b.check_in)} — ${fd(b.check_out)} · ${b.guests} гост. · ${fmt(b.total_minor)}</span><br><span>№ ${esc(b.ref)} · ${({confirmed:"Прийнято",cancelled:"Скасовано",completed:"Завершено",pending:"Очікує"})[b.status]||esc(b.status)}</span></div>`).join(""):'<p>Поки що немає бронювань. Оберіть оселю й забронюйте її.</p><button class="sa" id="agt">Дивитись оселі</button>'}
 const notify=()=>{subs.forEach(f=>f(user));dispatchEvent(new CustomEvent("auth:change",{detail:user}))};
+function openM(){q("#mnl").innerHTML=LINKS.map((l,i)=>`<a href="${l[1]}" style="--i:${i}">${l[0]}</a>`).join("");
+q("#mna").innerHTML=user?`<div class="mnu-u"><b>${esc(user.name)}</b><span>${esc(user.email)}</span></div><a class="mnb" href="account.html">Мій кабінет</a><button class="mnb2" id="mlo">Вийти</button>`:'<button class="mnb" id="mli">Увійти або зареєструватись</button>';
+mnu.classList.add("o");mnu.setAttribute("aria-hidden","false");lock()}
+function closeM(){mnu.classList.remove("o");mnu.setAttribute("aria-hidden","true");lock()}
+mnu.addEventListener("click",async e=>{if(e.target.closest(".ax")||e.target.closest("#mnl a")||e.target.closest(".mna a"))return closeM();
+if(e.target.id=="mli"){closeM();openA("in")}if(e.target.id=="mlo"){await api("auth/logout",{});user=null;paint();closeM();notify()}});
+addEventListener("resize",()=>{if(!isMob())closeM()});
 function openA(v){view=v||"in";render();au.classList.add("o");lock()}
 function closeA(){au.classList.remove("o");lock()}
 function openD(){paint();ad.classList.add("o");lock();loadBookings()}
 function closeD(){ad.classList.remove("o");lock()}
-pill.addEventListener("click",()=>user?openD():openA("in"));
+pill.addEventListener("click",()=>{if(isMob())return openM();user?openD():openA("in")});
 au.addEventListener("click",e=>{if(e.target==au||e.target.closest(".ax"))return closeA();const v=e.target.closest("[data-v]");if(v){e.preventDefault();view=v.dataset.v;render();return}
 const s=e.target.closest("[data-s]");if(s){const m=q("#asm");if(m)m.textContent="Вхід через "+s.dataset.s+" підключимо найближчим часом. Скористайтесь e-mail."}});
 au.addEventListener("submit",async e=>{e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f)),er=f.querySelector(".aer"),t=f.dataset.f;
@@ -37,7 +48,7 @@ btn.disabled=false;if(!r.ok){er.textContent=EM[r.error]||"Щось пішло н
 user=r.user;paint();closeA();notify()});
 ad.addEventListener("click",async e=>{if(e.target.closest(".ax"))closeD();if(e.target.id=="aso"){await api("auth/logout",{});user=null;paint();closeD();notify()}
 if(e.target.id=="agt"){closeD();if(q("#stays")){if(window.home)home();setTimeout(()=>q("#stays").scrollIntoView({behavior:"smooth"}),50)}else location.href="index.html#stays"}});
-addEventListener("keydown",e=>{if(e.key=="Escape"){closeA();closeD()}});
+addEventListener("keydown",e=>{if(e.key=="Escape"){closeA();closeD();closeM()}});
 window.Auth={get:()=>user,on:f=>{subs.push(f);if(loaded)f(user)},open:openA,drawer:openD};
 api("auth/me").then(d=>{user=d.user||null;loaded=true;paint();notify()});
 })();

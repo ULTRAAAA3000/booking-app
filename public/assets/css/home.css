@@ -1,0 +1,63 @@
+/* Секції головної сторінки. Префікс h* — щоб не перетинатися з іншими стилями. */
+.hm{position:relative;z-index:8;padding:120px clamp(20px,9.5vw,170px) 0;scroll-margin-top:84px}
+.hm .ey{font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--lm);margin-bottom:14px;font-weight:600}
+.hm h2{font:400 clamp(30px,3.6vw,52px)/1.1 'Playfair Display',serif;max-width:780px}
+.hm .ld{font-size:clamp(15px,1.15vw,17px);line-height:1.7;color:var(--mu);max-width:640px;margin-top:16px}
+.hrv{opacity:0;transform:translateY(40px);transition:opacity .9s var(--out),transform .9s var(--out);transition-delay:calc(var(--d,0)*90ms)}.hrv.v{opacity:1;transform:none}
+.hbtn{display:inline-flex;align-items:center;height:52px;padding:0 32px;margin-top:28px;border-radius:26px;background:#000;color:#fff;font-weight:600;font-size:15px;transition:transform .3s var(--out),box-shadow .3s}.hbtn:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.25)}
+/* чому ми */
+.hwhy{display:grid;grid-template-columns:1fr 1.35fr;gap:clamp(30px,5vw,80px);align-items:start}
+.hfs{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.hft{background:#fff;border-radius:22px;padding:26px;box-shadow:0 12px 36px rgba(110,60,50,.1);transition:transform .5s var(--out),box-shadow .5s}.hft:hover{transform:translateY(-6px);box-shadow:0 24px 50px rgba(110,60,50,.18)}
+.hft i{width:50px;height:50px;border-radius:16px;background:#fbe9dd;display:grid;place-items:center;margin-bottom:18px;transition:background .4s,transform .5s var(--out)}.hft:hover i{background:#f39419;transform:rotate(-8deg)}
+.hft svg{width:24px;height:24px;transition:stroke .4s}.hft:hover svg{stroke:#fff}
+.hft b{display:block;font-size:17px;margin-bottom:8px}.hft p{font-size:14px;line-height:1.65;color:var(--mu)}
+/* напрямки */
+.hrg{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:40px}
+.hrc{position:relative;display:block;aspect-ratio:3/4;border-radius:24px;overflow:hidden;color:#fff;box-shadow:0 14px 36px rgba(110,60,50,.16)}
+.hrc .im{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 1.2s var(--out)}.hrc:hover .im{transform:scale(1.06)}
+.hrc:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,15,25,0) 28%,rgba(30,15,25,.88))}
+.hrc .tx{position:absolute;z-index:2;left:20px;right:20px;bottom:20px}
+.hrc b{display:block;font:400 25px 'Playfair Display',serif;margin-bottom:6px}.hrc p{font-size:13px;line-height:1.55;opacity:.93}
+.hrc em{position:absolute;z-index:2;top:16px;left:16px;font-style:normal;font-size:12px;font-weight:600;background:rgba(255,255,255,.88);color:var(--ink);padding:5px 11px;border-radius:12px}
+/* як це працює */
+.hhw{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,4vw,56px);margin-top:50px;position:relative}
+.hhw:before{content:"";position:absolute;top:33px;left:16%;right:16%;height:2px;background:linear-gradient(90deg,#f39419,#c07a9a);transform:scaleX(0);transform-origin:left;transition:transform 1.8s var(--ease) .3s}.hhw.v:before{transform:scaleX(1)}
+.hhw>div{text-align:center;position:relative}
+.hhw i{width:66px;height:66px;border-radius:50%;background:#fff;box-shadow:0 10px 30px rgba(120,70,60,.18);display:grid;place-items:center;margin:0 auto 20px;font:400 26px 'Playfair Display',serif;font-style:normal}
+.hhw b{display:block;font-size:19px;margin-bottom:8px}.hhw p{font-size:14.5px;line-height:1.65;color:var(--mu);max-width:320px;margin:0 auto}
+/* сезони */
+.hse{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(24px,4vw,64px);margin-top:40px;align-items:center}
+.hsp{position:relative;aspect-ratio:4/3.2;border-radius:28px;overflow:hidden;box-shadow:0 18px 60px rgba(120,70,60,.16)}
+.hsp div{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .8s}.hsp div.a{opacity:1}
+.hst{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.hst button{padding:9px 22px;border-radius:20px;border:1.4px solid #d9c6bb;font-size:14px;font-weight:600;transition:background .3s,color .3s,border-color .3s}.hst button.a,.hst button:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.hsb{transition:opacity .3s,transform .4s var(--out)}.hsb.o{opacity:0;transform:translateY(10px)}
+.hsb h3{font:400 clamp(24px,2.4vw,34px)/1.15 'Playfair Display',serif;margin-bottom:12px}.hsb p{color:var(--mu);line-height:1.7;font-size:15px}
+.hsl{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px}
+.hsl h4{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--lm);margin-bottom:8px}
+.hsl ul{padding:0;margin:0}.hsl li{list-style:none;font-size:14px;line-height:1.55;padding:6px 0 6px 20px;position:relative}.hsl li:before{content:"";position:absolute;left:0;top:13px;width:8px;height:8px;border-radius:50%;background:#f39419}
+/* FAQ */
+.hfq{display:grid;grid-template-columns:1fr 1.5fr;gap:clamp(30px,5vw,90px);align-items:start}
+.hfq .hs{position:sticky;top:110px}
+.hql>div{border-bottom:1px solid rgba(29,26,28,.14)}.hql>div:first-child{border-top:1px solid rgba(29,26,28,.14)}
+.hql button{width:100%;text-align:left;padding:22px 0;font-size:clamp(16px,1.3vw,18.5px);font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:20px;line-height:1.35}
+.hql button:after{content:"+";flex:none;width:34px;height:34px;border-radius:50%;border:1.4px solid #d9c6bb;display:grid;place-items:center;font-weight:300;font-size:22px;line-height:1;padding-bottom:2px;transition:transform .45s var(--out),background .3s,color .3s,border-color .3s}
+.hql .o button:after{transform:rotate(45deg);background:var(--ink);color:#fff;border-color:var(--ink)}
+.hql .an{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--out)}.hql .o .an{grid-template-rows:1fr}
+.hql .an p{overflow:hidden;min-height:0;color:var(--mu);line-height:1.75;font-size:15px}.hql .o .an p{padding-bottom:24px}
+/* заклик */
+.hcta{position:relative;border-radius:30px;overflow:hidden;color:#fff;min-height:360px;display:flex;align-items:center;padding:clamp(28px,5vw,70px);margin-top:130px}
+.hcta .im{position:absolute;inset:0;background-size:cover;background-position:center}.hcta:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(40,24,34,.82),rgba(40,24,34,.25));z-index:1}
+.hcta .in{position:relative;z-index:2;max-width:560px}.hcta h2{color:#fff}.hcta p{opacity:.92;line-height:1.7;margin-top:14px}.hcta .hbtn{background:#f39419}
+/* футер */
+.hfoot{margin-top:130px;background:#2e2229;color:#e9dcd5;padding:70px clamp(20px,9.5vw,170px) 30px;position:relative;z-index:8}
+.hff{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px}
+.hfoot .lg{font-weight:300;font-size:28px;margin-bottom:14px;display:block}.hfoot p{opacity:.7;font-size:14px;line-height:1.7;max-width:340px}
+.hfoot h4{font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.5;margin-bottom:16px;font-weight:600}
+.hfoot a.fl{display:block;font-size:14.5px;margin-bottom:11px;opacity:.85;width:max-content;transition:opacity .3s,transform .3s}.hfoot a.fl:hover{opacity:1;transform:translateX(4px)}
+.hfc{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;opacity:.55;margin-top:50px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12)}
+@media(max-width:900px){.hwhy,.hse,.hfq{grid-template-columns:1fr}.hfq .hs{position:static}.hhw{grid-template-columns:1fr}.hhw:before{display:none}.hff{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.hm{padding:84px 16px 0}.hfoot{padding-left:16px;padding-right:16px}.hfs{grid-template-columns:1fr}.hsl{grid-template-columns:1fr}
+.hrg{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin-right:-16px;padding-right:16px;padding-bottom:8px;scrollbar-width:none}.hrg::-webkit-scrollbar{display:none}
+.hrc{flex:0 0 76vw;scroll-snap-align:start}.hcta{margin-top:90px;min-height:320px}.hm .hcta{margin-top:0}.hfoot{margin-top:90px}.hff{grid-template-columns:1fr}}

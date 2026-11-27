@@ -5,10 +5,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Montserrat:wght@600;700;800&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/main.css">
-<link rel="stylesheet" href="assets/css/auth.css"></head><body>
+<link rel="stylesheet" href="assets/css/auth.css">
+<link rel="stylesheet" href="assets/css/home.css"></head><body>
 <nav id="nav">
 <div><a class="logo" href="#" onclick="home();return false">BookingApp</a></div>
-<div class="nl"><a href="stays.html">Оселі</a><a href="#top">Куди поїхати</a><a href="#stays">Контакти</a></div>
+<div class="nl"><a href="stays.html">Оселі</a><a href="#regions">Куди поїхати</a><a href="#faq">Запитання</a></div>
 <div style="gap:18px">
 <svg class="ic" viewBox="0 0 24 24" style="width:20px"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>
 <div class="pill"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg><i><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-5 4-7 8-7s8 2 8 7z"/></svg></i></div></div>
@@ -30,6 +31,64 @@
 <div class="pop" id="cal"></div><div class="pop" id="gp"></div>
 </div></div>
 <section id="stays"><div class="sh"><h2 class="ser">Рекомендовані оселі</h2><button class="sa" onclick="location.href='stays.html'">Дивитись усі</button></div><div class="grid" id="gd"></div></section>
+
+<section class="hm" id="why"><div class="hwhy"><div class="hrv"><div class="ey">Про сервіс</div><h2>Бронювання, у якому все зрозуміло з першого екрана</h2><p class="ld">Ми зібрали оселі Карпат в одному каталозі й прибрали все, що заважає вибрати: приховані доплати, застарілі календарі й зайві кроки між «хочу» та «забронював».</p><a class="hbtn" href="stays.html">Відкрити каталог</a></div>
+<div class="hfs">
+<div class="hft hrv" style="--d:1"><i><svg class="ic" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8zM7.5 7.5h.01"/></svg></i><b>Прозора ціна</b><p>Сума за ночі рахується на сервері й видна до підтвердження. Ніяких доплат, що з'являються наприкінці.</p></div>
+<div class="hft hrv" style="--d:2"><i><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M9.5 15l2 2 3.5-4"/></svg></i><b>Лише вільні дати</b><p>Календар на сторінці оселі вимикає зайняті дні. Календарі осель можна синхронізувати з Booking.com, щоб не було подвійних бронювань.</p></div>
+<div class="hft hrv" style="--d:3"><i><svg class="ic" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6zM9 12l2 2 4-4"/></svg></i><b>Без передоплати</b><p>Номер бронювання з'являється одразу після підтвердження. Онлайн-оплату підключимо пізніше, поки вона не потрібна.</p></div>
+<div class="hft hrv" style="--d:4"><i><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-5 4-7 8-7s8 2 8 7"/></svg></i><b>Усе в кабінеті</b><p>Майбутні поїздки, скасування, обране й відгуки після виїзду зберігаються в акаунті. Забронювати можна і без нього.</p></div>
+</div></div></section>
+
+<section class="hm" id="regions"><div class="ey hrv">Куди поїхати</div><h2 class="hrv" style="--d:1">Вісім напрямків, у кожного свій характер</h2><p class="ld hrv" style="--d:2">Від гуцульської Верховини до гірськолижних Буковеля й Славська. Оберіть напрямок і одразу побачите оселі саме там.</p>
+<div class="hrg" id="hrg">
+<a class="hrc" href="stays.html?region=verkhovyna"><div class="im"></div><em></em><div class="tx"><b>Верховина</b><p>Серце Гуцульщини над Черемошем: дерев'яна архітектура, традиції й спокійний ритм без курортного натовпу.</p></div></a>
+<a class="hrc" href="stays.html?region=kosiv"><div class="im"></div><em></em><div class="tx"><b>Косів</b><p>Місто гуцульських ремесел: кераміка, різьба й ткацтво, а ще відомий ярмарок майстрів.</p></div></a>
+<a class="hrc" href="stays.html?region=vorokhta"><div class="im"></div><em></em><div class="tx"><b>Ворохта</b><p>Зручна база для походів на Говерлу, найвищу вершину України (2061 м). Є залізнична станція.</p></div></a>
+<a class="hrc" href="stays.html?region=yaremche"><div class="im"></div><em></em><div class="tx"><b>Яремче</b><p>Водоспад Пробій, сувенірний ринок і прогулянки вздовж Пруту. Легко дістатися поїздом чи автобусом.</p></div></a>
+<a class="hrc" href="stays.html?region=bukovel"><div class="im"></div><em></em><div class="tx"><b>Буковель</b><p>Найбільший гірськолижний курорт України: узимку траси й підйомники, влітку велосипеди та маршрути.</p></div></a>
+<a class="hrc" href="stays.html?region=rakhiv"><div class="im"></div><em></em><div class="tx"><b>Рахів</b><p>Закарпатське місто біля Чорногори. Поруч Ясіня та Ділове, де позначено географічний центр Європи.</p></div></a>
+<a class="hrc" href="stays.html?region=mizhhirya"><div class="im"></div><em></em><div class="tx"><b>Міжгір'я</b><p>Озеро Синевир, найбільше озеро Українських Карпат, і однойменний національний парк.</p></div></a>
+<a class="hrc" href="stays.html?region=slavske"><div class="im"></div><em></em><div class="tx"><b>Славське</b><p>Гірськолижний курорт біля гори Тростян: траси різної складності та підйомники.</p></div></a>
+</div></section>
+
+<section class="hm" id="how"><div class="ey hrv">Як це працює</div><h2 class="hrv" style="--d:1">Від вибору до підтвердженої брони за три кроки</h2>
+<div class="hhw hrv" style="--d:2">
+<div><i>1</i><b>Оберіть оселю</b><p>У каталозі відфільтруйте за регіоном, типом, ціною та датами. Показуємо лише оселі, вільні на ваш період.</p></div>
+<div><i>2</i><b>Забронюйте онлайн</b><p>Вкажіть дати, гостей і контакти. Сума рахується на сервері, а номер бронювання з'являється одразу, без очікування відповіді.</p></div>
+<div><i>3</i><b>Керуйте поїздкою</b><p>У кабінеті видно всі бронювання. Плани змінилися: скасуйте майбутню поїздку, і дати знову стануть вільними.</p></div>
+</div></section>
+
+<section class="hm" id="seasons"><div class="ey hrv">Сезони</div><h2 class="hrv" style="--d:1">Карпати цілий рік: коли їхати й що взяти</h2>
+<div class="hse hrv" style="--d:2"><div class="hsp" id="hsp"><div class="a"></div><div></div><div></div><div></div></div>
+<div><div class="hst" id="hst"><button class="a">Зима</button><button>Весна</button><button>Літо</button><button>Осінь</button></div>
+<div class="hsb" id="hsb">
+<div data-s="0"><h3>Зима: сніг, піч і гарячий узвар</h3><p>Сніг лежить від грудня до березня, а високо в горах і довше. Це час лижних трас, довгих вечорів біля печі та різдвяних свят.</p><div class="hsl"><div><h4>Чим зайнятися</h4><ul><li>Лижі й сноуборд у Буковелі та Славську</li><li>Санки й прогулянки засніженим лісом</li><li>Різдвяні й новорічні гуцульські свята</li></ul></div><div><h4>Що взяти</h4><ul><li>Термобілизну й непромокальну куртку</li><li>Зимове взуття з глибоким протектором</li><li>Сонцезахисні окуляри для яскравого снігу</li></ul></div></div></div>
+<div data-s="1" hidden><h3>Весна: потічки й тихі стежки</h3><p>Сніг сходить, у лісах прокидаються потоки, а в долинах цвітуть сади. Туристів менше, ніж узимку й улітку, тож стежки вільніші.</p><div class="hsl"><div><h4>Чим зайнятися</h4><ul><li>Водоспади в повноводдя</li><li>Короткі маршрути долинами й лісами</li><li>Великодні традиції в гуцульських селах</li></ul></div><div><h4>Що взяти</h4><ul><li>Непромокальне взуття: у горах ще може лежати сніг</li><li>Одяг шарами: зранку холодно, вдень тепло</li><li>Запасну суху пару шкарпеток</li></ul></div></div></div>
+<div data-s="2" hidden><h3>Літо: полонини, озера й довгі дні</h3><p>Полонини зеленіють і цвітуть, дні довгі. Найкращий час для походів на Говерлу, до озера Синевир і високогірних озер.</p><div class="hsl"><div><h4>Чим зайнятися</h4><ul><li>Піші маршрути й підйом на Говерлу</li><li>Прогулянки до озера Синевир</li><li>Велосипеди та купання в гірських річках</li></ul></div><div><h4>Що взяти</h4><ul><li>Дощовик: у горах погода швидко змінюється</li><li>Міцне трекінгове взуття</li><li>Сонцезахисний крем і запас води</li></ul></div></div></div>
+<div data-s="3" hidden><h3>Осінь: золоті ліси й тиша</h3><p>Букові ліси стають золотими й багряними, повітря прозоре, а курортна метушня стихає. Хороший час для спокійних походів.</p><div class="hsl"><div><h4>Чим зайнятися</h4><ul><li>Фотопрогулянки осінніми лісами</li><li>Гастромаршрути: бануш, сири, узвар</li><li>Спокійні походи полонинами</li></ul></div><div><h4>Що взяти</h4><ul><li>Теплу куртку й шапку на вечори</li><li>Ліхтарик: темніє раніше</li><li>Термос із чаєм</li></ul></div></div></div>
+</div></div></div></section>
+
+<section class="hm" id="faq"><div class="hfq"><div class="hs hrv"><div class="ey">Запитання</div><h2>Часті запитання</h2><p class="ld">Коротко про бронювання, оплату й скасування. Не знайшли відповідь, перегляньте розділ «Допомога» у вашому кабінеті.</p></div>
+<div class="hql hrv" id="hql" style="--d:1">
+<div class="o"><button aria-expanded="true">Як забронювати оселю?</button><div class="an"><p>Оберіть оселю в каталозі, виберіть дати в календарі й натисніть «Забронювати». Заповніть контакти та підтвердіть: номер бронювання з'явиться одразу.</p></div></div>
+<div><button aria-expanded="false">Чи потрібна оплата?</button><div class="an"><p>Поки ні. Онлайн-оплату ми підключимо пізніше. Зараз бронювання створюється без оплати, і форма підтвердження про це повідомляє.</p></div></div>
+<div><button aria-expanded="false">Чи потрібен акаунт?</button><div class="an"><p>Ні, можна забронювати без нього. З акаунтом бронювання зберігається в кабінеті: його можна переглянути, скасувати й залишити відгук після виїзду.</p></div></div>
+<div><button aria-expanded="false">Як скасувати бронювання?</button><div class="an"><p>У кабінеті відкрийте «Бронювання» й натисніть «Скасувати» біля майбутньої поїздки. Дати знову стануть вільними. Бронювання без акаунта самостійно скасувати поки не можна.</p></div></div>
+<div><button aria-expanded="false">Як змінити дати?</button><div class="an"><p>Скасуйте поточне бронювання й створіть нове на потрібні дати. Перед цим перевірте в календарі оселі, чи вільні вони.</p></div></div>
+<div><button aria-expanded="false">Чи завжди календар оселі актуальний?</button><div class="an"><p>Дати блокуються в момент бронювання, а календарі осель можна синхронізувати з Booking.com. Така синхронізація не миттєва, тому в рідкісних випадках обрані дати можуть виявитися зайнятими. Тоді ми повідомимо про це перед підтвердженням.</p></div></div>
+<div><button aria-expanded="false">Що входить у ціну?</button><div class="an"><p>Ціна за ніч, помножена на кількість ночей. Підсумкова сума видна ще до підтвердження бронювання, додаткових зборів ми не додаємо.</p></div></div>
+<div><button aria-expanded="false">Як дістатися до Карпат?</button><div class="an"><p>Найзручніше поїздом або автобусом до Івано-Франківська чи Яремчі. До Ворохти й Рахова також ходять потяги. Далі до оселі можна доїхати маршруткою або таксі.</p></div></div>
+</div></div></section>
+
+<section class="hm" style="padding-top:0"><div class="hcta hrv"><div class="im" id="hcim"></div><div class="in"><div class="ey" style="color:rgba(255,255,255,.75)">Готові обирати?</div><h2>Знайдіть оселю на свої дати</h2><p>У каталозі можна відфільтрувати оселі за регіоном, ціною, кількістю гостей і вільними датами.</p><a class="hbtn" href="stays.html">Перейти до каталогу</a></div></div></section>
+
+<footer class="hfoot" id="ft"><div class="hff"><div><a class="lg" href="#top">BookingApp</a><p>Бронювання осель у Карпатах: від гуцульських ґражд до сучасних шале.</p></div>
+<div><h4>Каталог</h4><a class="fl" href="stays.html">Усі оселі</a><a class="fl" href="#regions">Напрямки</a><a class="fl" href="#seasons">Сезони</a></div>
+<div><h4>Інформація</h4><a class="fl" href="#how">Як це працює</a><a class="fl" href="#faq">Запитання</a><a class="fl" href="#why">Про сервіс</a></div>
+<div><h4>Акаунт</h4><a class="fl" href="account.html">Мій кабінет</a><a class="fl" href="account.html#bookings">Бронювання</a><a class="fl" href="account.html#saved">Обране</a></div></div>
+<div class="hfc"><span>© 2026 BookingApp</span><span>Демо-версія</span></div></footer>
 <div id="det"><div class="dw" id="dw"></div></div><div id="fl"></div>
 <script src="assets/js/main.js"></script>
-<script src="assets/js/auth.js"></script></body></html>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/home.js"></script></body></html>

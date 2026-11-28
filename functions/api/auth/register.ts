@@ -1,7 +1,8 @@
 import { Env, json, fail, ready, sameOrigin, body, str, EMAIL, hashPassword, startSession } from '../../_lib/core';
 import { protect } from '../../_lib/guard';
+import { sendVerification } from '../../_lib/mail';
 
-export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
+export const onRequestPost: PagesFunction<Env> = async ({ env, request, waitUntil }) => {
   const bad = ready(env); if (bad) return bad;
   if (!sameOrigin(request)) return fail('forbidden', 403);
   const b = await body(request); if (!b) return fail('invalid_body');
@@ -16,5 +17,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
     await env.DB.prepare('INSERT INTO users (id,email,name,password_hash,last_login_at) VALUES (?,?,?,?,strftime(\'%Y-%m-%dT%H:%M:%fZ\',\'now\'))')
       .bind(id, email, name, await hashPassword(pw)).run();
   } catch (e) { if (String(e).includes('UNIQUE')) return fail('email_taken', 409); throw e; }
-  return json({ user: { id, name, email, role: 'guest' } }, 201, { 'set-cookie': await startSession(env, request, id) });
+  waitUntil(sendVerification(env, request, { id, name, email })); // без RESEND_API_KEY нічого не робить
+  return json({ user: { id, name, email, role: 'guest', verified: false } }, 201, { 'set-cookie': await startSession(env, request, id) });
 };

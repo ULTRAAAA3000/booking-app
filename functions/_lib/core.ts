@@ -1,5 +1,5 @@
-export interface Env { DB: D1Database; SESSION_SECRET: string; TURNSTILE_SECRET?: string; TURNSTILE_SITE_KEY?: string; GOOGLE_CLIENT_ID?: string; GOOGLE_CLIENT_SECRET?: string; TELEGRAM_BOT_TOKEN?: string }
-export interface User { id: string; name: string; email: string; role: string }
+export interface Env { DB: D1Database; SESSION_SECRET: string; TURNSTILE_SECRET?: string; TURNSTILE_SITE_KEY?: string; GOOGLE_CLIENT_ID?: string; GOOGLE_CLIENT_SECRET?: string; TELEGRAM_BOT_TOKEN?: string; RESEND_API_KEY?: string; MAIL_FROM?: string; CONTACT_TO?: string; PUBLIC_EMAIL?: string; PUBLIC_PHONE?: string; PUBLIC_TELEGRAM?: string; PUBLIC_ADDRESS?: string }
+export interface User { id: string; name: string; email: string; role: string; verified: boolean }
 export interface Property { id: number; slug: string; title: string; region: string; cover: string; price_minor: number; currency: string; max_guests: number; min_nights: number; max_nights: number | null }
 
 const enc = new TextEncoder();
@@ -59,9 +59,9 @@ export async function endSession(env: Env, req: Request) {
 export async function currentUser(env: Env, req: Request): Promise<User | null> {
   const t = sid(req);
   if (!t) return null;
-  return env.DB.prepare(`SELECT u.id,u.name,u.email,u.role FROM sessions s JOIN users u ON u.id=s.user_id
+  return env.DB.prepare(`SELECT u.id,u.name,u.email,u.role,u.email_verified_at IS NOT NULL AS verified FROM sessions s JOIN users u ON u.id=s.user_id
     WHERE s.token_hash=? AND s.expires_at>strftime('%Y-%m-%dT%H:%M:%fZ','now') AND u.deleted_at IS NULL`)
-    .bind(await hmac(env.SESSION_SECRET, t)).first<User>().then((u) => u && { ...u, email: realEmail(u.email) });
+    .bind(await hmac(env.SESSION_SECRET, t)).first<User>().then((u) => u && { ...u, email: realEmail(u.email), verified: !!u.verified });
 }
 
 // ---- оселі, дати, доступність ----

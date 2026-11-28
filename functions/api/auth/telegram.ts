@@ -19,5 +19,5 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
   if (!/^\d{1,20}$/.test(id)) return fail('telegram_failed', 401);
   const s = (k: string) => (typeof b[k] === 'string' ? (b[k] as string).trim() : '');
   const u = await socialLogin(env, { provider: 'telegram', id, name: [s('first_name'), s('last_name')].filter(Boolean).join(' ') || s('username') });
-  return json({ user: { ...u, email: realEmail(u.email) } }, 200, { 'set-cookie': await startSession(env, request, u.id) });
+  return json({ user: { ...u, email: realEmail(u.email), verified: false } }, 200, { 'set-cookie': await startSession(env, request, u.id) });
 };

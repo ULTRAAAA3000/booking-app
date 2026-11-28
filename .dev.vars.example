@@ -7,3 +7,11 @@ SESSION_SECRET=замініть-на-довгий-випадковий-рядо�
 # GOOGLE_CLIENT_ID=
 # GOOGLE_CLIENT_SECRET=
 # TELEGRAM_BOT_TOKEN=
+# Пошта через Resend (листи підтвердження e-mail, підтвердження броней, форма контактів) і дані на сторінці «Контакти»:
+# RESEND_API_KEY=re_...
+# MAIL_FROM=BookingApp <noreply@ваш-домен>
+# CONTACT_TO=пошта-куди-приходять-повідомлення-з-форми   (кілька адрес через кому)
+# PUBLIC_EMAIL=
+# PUBLIC_PHONE=
+# PUBLIC_TELEGRAM=@ваш_акаунт
+# PUBLIC_ADDRESS=

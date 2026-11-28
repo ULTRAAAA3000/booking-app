@@ -1,8 +1,9 @@
 import { Env, json, fail, ready, sameOrigin, body, str, EMAIL, PHONE, currentUser, getProperty, checkStay, nights, kyivToday } from '../_lib/core';
 import { protect } from '../_lib/guard';
+import { mailOn, sendMail, bookingMail } from '../_lib/mail';
 
 // Створення бронювання: працює і для гостя без акаунта, і для користувача з сесією (тоді бронь прив'язується до акаунта).
-export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
+export const onRequestPost: PagesFunction<Env> = async ({ env, request, waitUntil }) => {
   const bad = ready(env); if (bad) return bad;
   if (!sameOrigin(request)) return fail('forbidden', 403);
   const b = await body(request); if (!b) return fail('invalid_body');
@@ -25,7 +26,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ env, request }) => {
     if (String(e).includes('dates_unavailable')) return fail('dates_unavailable', 409); // тригер у базі
     throw e;
   }
-  return json({ booking: { id, ref: id.slice(0, 8).toUpperCase(), slug: p.slug, title: p.title, check_in: a, check_out: o, nights: n, guests, total_minor: total, currency: p.currency, status: 'confirmed', account: !!user } }, 201);
+  const booking = { id, ref: id.slice(0, 8).toUpperCase(), slug: p.slug, title: p.title, check_in: a, check_out: o, nights: n, guests, total_minor: total, currency: p.currency, status: 'confirmed', account: !!user };
+  if (mailOn(env)) waitUntil(sendMail(env, { to: email, ...bookingMail(new URL(request.url).origin, { ...booking, name }) })); // підтвердження гостю на e-mail із форми
+  return json({ booking, mail: mailOn(env) }, 201);
 };
 
 export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {

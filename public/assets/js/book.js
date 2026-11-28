@@ -30,19 +30,19 @@ root.innerHTML=`<div class="bgr"><form class="bcard" id="bf" novalidate><div id=
 ${inp("email","email","E-mail",'autocomplete="email" maxlength="254"')}
 <label class="afi"><small>Побажання (необов'язково)</small><textarea name="note" maxlength="500"></textarea></label>
 ${Guard.hp()}<div class="cft" id="bcf"></div><div class="aer" id="ber"></div><button class="apb" id="bsub">Підтвердити бронювання</button>
-<p class="bnt">Оплата поки не потрібна: оплату підключимо наступним етапом. Підтвердження на пошту наразі не надсилається. Після бронювання ви побачите номер замовлення.</p></form>
+<p class="bnt">Оплата поки не потрібна: оплату підключимо наступним етапом. Після бронювання ви побачите номер замовлення.<span id=\"bml\"></span></p></form>
 <aside class="bsum"><div class="bimg" style="${p.cover?`background-image:url(${esc(p.cover)})`:""}"></div><div class="bin"><h3>${esc(p.title)}</h3><div class="rg2">${esc(p.region)}, Карпати</div><div id="bsm"></div><div class="bst" id="bst"></div></div></aside></div>`;
 const f=$("#bf");gd=Guard.mount($("#bcf"));f.addEventListener("input",e=>{if(e.target.name=="in"&&e.target.value){f.elements.out.min=nextDay(e.target.value);if(f.elements.out.value&&f.elements.out.value<=e.target.value)f.elements.out.value=""}if(["in","out"].includes(e.target.name))later();$("#ber").textContent=""});
 f.elements.guests.addEventListener("change",later);
-f.addEventListener("click",e=>{if(e.target.id=="bli")Auth.open("in")});f.addEventListener("submit",submit);banner();sum();check()}
+f.addEventListener("click",e=>{if(e.target.id=="bli")Auth.open("in")});f.addEventListener("submit",submit);Guard.cfg().then(c=>{const m=$("#bml");if(m&&c&&c.mail)m.textContent=" Підтвердження надійде на вказаний e-mail."});banner();sum();check()}
 async function submit(e){e.preventDefault();const er=$("#ber");er.textContent="";
 const d={slug,in:val("in"),out:val("out"),guests:+val("guests"),name:val("name"),phone:val("phone"),email:val("email"),note:val("note")};
 if(!d.in||!d.out)return er.textContent="Оберіть дати заїзду та виїзду";
 busy=true;$("#bsub").disabled=true;$("#bsub").textContent="Опрацьовуємо…";
 const r=await api("bookings",{...d,...await gd.fields($("#bf"))});gd.reset();busy=false;$("#bsub").textContent="Підтвердити бронювання";
 if(!r.ok){er.textContent=ER[r.error]||"Щось пішло не так. Спробуйте ще раз.";if(r.error=="dates_unavailable")check();else sum();return}
-done(r.booking)}
-function done(b){root.innerHTML=`<div class="bok"><svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="38"/><path d="M26 43l11 11 21-23"/></svg><h2>Ваше замовлення прийнято</h2><p>Номер бронювання: <b>${esc(b.ref)}</b>. Збережіть його.</p>
+done(r.booking,r.mail?d.email:"")}
+function done(b,mail){root.innerHTML=`<div class="bok"><svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="38"/><path d="M26 43l11 11 21-23"/></svg><h2>Ваше замовлення прийнято</h2><p>Номер бронювання: <b>${esc(b.ref)}</b>. Збережіть його.${mail?` Підтвердження надіслано на <b>${esc(mail)}</b>.`:""}</p>
 <div class="bx"><div class="brw"><span>Оселя</span>${esc(b.title)}</div><div class="brw"><span>Заїзд</span>${fd(b.check_in)}</div><div class="brw"><span>Виїзд</span>${fd(b.check_out)}</div><div class="brw"><span>Ночей / гостей</span>${b.nights} / ${b.guests}</div><div class="brw t"><span>Разом</span>${fmt(b.total_minor)}</div></div>
 <p style="font-size:13px;margin-bottom:22px">${b.account?"Бронювання збережено у вашому акаунті.":"Ви бронювали без акаунта, тож збережіть номер бронювання."} Оплата — наступним етапом.</p>
 <div class="acts"><a href="index.html" class="pr2">На головну</a>${b.account?'<button id="bmy">Мої бронювання</button>':""}</div></div>`;

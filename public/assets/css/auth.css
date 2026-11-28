@@ -43,3 +43,4 @@ nav .pill i.u{font-size:11px;font-weight:700;background:#fff;color:#4a3442}nav.s
 .mnb2{height:54px;border-radius:27px;border:1.4px solid var(--ink);font-weight:600;font-size:15px}
 .ad:not(.o){box-shadow:none}
 .cft{display:flex;justify-content:center}.cft:empty{display:none}
+.avn{background:#fbe9dd;border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.55}.avn .alk{margin:6px 0 0;font-weight:600;color:var(--ink)}.avn #avm{color:var(--mu);font-size:13px;margin-top:6px}

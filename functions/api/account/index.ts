@@ -2,7 +2,7 @@ import { Env, json, fail, body, str, PHONE, needUser, verifyPassword, expiredCoo
 import { rateLimit } from '../../_lib/guard';
 
 const profile = (env: Env, id: string) =>
-  env.DB.prepare('SELECT id,name,email,phone,locale,notify_email,marketing_opt_in,created_at FROM users WHERE id=?').bind(id).first<{ email: string }>().then((p) => p && { ...p, email: realEmail(p.email) });
+  env.DB.prepare('SELECT id,name,email,phone,locale,notify_email,marketing_opt_in,email_verified_at,created_at FROM users WHERE id=?').bind(id).first<{ email: string }>().then((p) => p && { ...p, email: realEmail(p.email) });
 
 export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
   const a = await needUser(env, request); if (a.res) return a.res;
@@ -35,6 +35,8 @@ export const onRequestDelete: PagesFunction<Env> = async ({ env, request }) => {
     env.DB.prepare('DELETE FROM sessions WHERE user_id=?').bind(id),
     env.DB.prepare('DELETE FROM favorites WHERE user_id=?').bind(id),
     env.DB.prepare('DELETE FROM auth_identities WHERE user_id=?').bind(id),
+    env.DB.prepare('DELETE FROM email_verifications WHERE user_id=?').bind(id),
+    env.DB.prepare("UPDATE contact_messages SET user_id=NULL,name='Видалений користувач',email='deleted@invalid',phone=NULL WHERE user_id=?").bind(id),
   ]);
   return json({ ok: true }, 200, { 'set-cookie': expiredCookie(request) });
 };

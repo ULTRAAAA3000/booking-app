@@ -49,7 +49,7 @@ au.addEventListener("submit",async e=>{e.preventDefault();const f=e.target,d=Obj
 if(t=="magic"){er.textContent="Вхід за посиланням з'явиться після підключення пошти. Скористайтесь e-mail і паролем.";return}
 const btn=f.querySelector(".apb");btn.disabled=true;er.textContent="";
 const x=await f._g.fields(f);const r=await api(t=="up"?"auth/register":"auth/login",t=="up"?{name:d.name,email:d.email,password:d.password,...x}:{email:d.email,password:d.password,...x});f._g.reset();
-btn.disabled=false;if(!r.ok){er.textContent=EM[r.error]||"Щось пішло не так. Спробуйте ще раз. ("+(r.error||r.status||"?")+")";return}
+btn.disabled=false;if(!r.ok){er.textContent=r.detail?"Помилка на сервері: "+r.detail:EM[r.error]||"Щось пішло не так. Спробуйте ще раз. ("+(r.error||r.status||"?")+")";return}
 user=r.user;paint();closeA();notify()});
 ad.addEventListener("click",async e=>{if(e.target.closest(".ax"))closeD();
 if(e.target.id=="avr"){const b=e.target,m=q("#avm");b.disabled=true;const r=await api("auth/verify",{});m.textContent=r.ok?(r.verified?"E-mail уже підтверджено":"Лист надіслано. Перевірте пошту (і папку «Спам»)."):(EM[r.error]||"Щось пішло не так. Спробуйте ще раз.");if(r.verified){user.verified=true;paint()}b.disabled=false}

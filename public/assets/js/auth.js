@@ -10,7 +10,7 @@ const api=async(p,body)=>{try{const r=await fetch("/api/"+p,{method:body?"POST":
 let user=null,loaded=false,view="in",cf={},note=new URLSearchParams(location.search).get("auth_error")||"";const subs=[];
 document.body.insertAdjacentHTML("beforeend",'<div class="au" id="au"><div class="ac" role="dialog" aria-modal="true" aria-label="Вхід"><button class="ax" aria-label="Закрити">×</button><div id="ab"></div></div></div><aside class="ad" id="ad" aria-label="Акаунт"><button class="ax" aria-label="Закрити">×</button><div id="adb" style="display:contents"></div></aside>');
 const base=q("#stays")?"":"index.html";
-const LINKS=[["Оселі","stays.html"],["Куди поїхати",base+"#regions"],["Як це працює",base+"#how"],["Запитання",base+"#faq"],["Контакти","contacts.html"]];
+const LINKS=[["Оселі","stays.html"],["Куди поїхати","regions.html"],["Як це працює",base+"#how"],["Запитання",base+"#faq"],["Контакти","contacts.html"]];
 document.body.insertAdjacentHTML("beforeend",'<div class="mnu" id="mnu" aria-hidden="true"><div class="mnh"><a class="logo" href="'+(base||"#")+'">BookingApp</a><button class="ax" aria-label="Закрити меню">×</button></div><div class="mnl" id="mnl"></div><div class="mna" id="mna"></div></div>');
 const mnu=q("#mnu"),isMob=()=>window.matchMedia&&matchMedia("(max-width:860px)").matches;
 const au=q("#au"),ad=q("#ad"),pill=q("nav .pill"),pi=pill.querySelector("i"),ico=pi.innerHTML;

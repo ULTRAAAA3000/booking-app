@@ -32,6 +32,9 @@ const layout = (title: string, inner: string, btn?: { href: string; label: strin
 // Токен у листі, у базі лише його HMAC. cooldownMin: не надсилати знову, якщо лист уже йшов нещодавно.
 export async function sendVerification(env: Env, req: Request, u: { id: string; name: string; email: string }, cooldownMin = 10): Promise<'sent' | 'wait' | 'failed' | 'off'> {
   if (!mailOn(env) || !u.email || u.email.endsWith('.invalid')) return 'off';
+  try { return await sendVerificationMail(env, req, u, cooldownMin); } catch (e) { console.error('verification', e); return 'failed'; } // збій пошти чи бази не повинен ламати реєстрацію й вхід
+}
+async function sendVerificationMail(env: Env, req: Request, u: { id: string; name: string; email: string }, cooldownMin: number): Promise<'sent' | 'wait' | 'failed'> {
   const recent = await env.DB.prepare("SELECT 1 FROM email_verifications WHERE user_id=? AND created_at>strftime('%Y-%m-%dT%H:%M:%fZ','now',?)").bind(u.id, `-${cooldownMin} minutes`).first();
   if (recent) return 'wait';
   const token = [...crypto.getRandomValues(new Uint8Array(32))].map((x) => x.toString(16).padStart(2, '0')).join('');

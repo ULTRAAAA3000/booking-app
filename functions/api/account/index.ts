@@ -1,8 +1,8 @@
-import { Env, json, fail, body, str, PHONE, needUser, verifyPassword, expiredCookie } from '../../_lib/core';
+import { Env, json, fail, body, str, PHONE, needUser, verifyPassword, expiredCookie, realEmail } from '../../_lib/core';
 import { rateLimit } from '../../_lib/guard';
 
 const profile = (env: Env, id: string) =>
-  env.DB.prepare('SELECT id,name,email,phone,locale,notify_email,marketing_opt_in,created_at FROM users WHERE id=?').bind(id).first();
+  env.DB.prepare('SELECT id,name,email,phone,locale,notify_email,marketing_opt_in,created_at FROM users WHERE id=?').bind(id).first<{ email: string }>().then((p) => p && { ...p, email: realEmail(p.email) });
 
 export const onRequestGet: PagesFunction<Env> = async ({ env, request }) => {
   const a = await needUser(env, request); if (a.res) return a.res;

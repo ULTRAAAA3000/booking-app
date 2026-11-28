@@ -1,13 +1,13 @@
-/* Акаунт: реальний вхід через /api/auth (e-mail + пароль). Соцмережі й вхід за посиланням — підключимо пізніше. */
+/* Акаунт: реальний вхід через /api/auth (e-mail + пароль, Google, Telegram). Кнопки соцмереж вмикаються, коли на сервері задано змінні (див. /api/config). Вхід за посиланням — пізніше. */
 (()=>{
-const q=s=>document.querySelector(s),SOC=[["Google","G","#ea4335"],["Telegram","T","#27a7e7"]];
+const q=s=>document.querySelector(s),SOC=[["Google","G","#ea4335","google"],["Telegram","T","#27a7e7","telegram"]];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const MON=["січ","лют","бер","кві","тра","чер","лип","сер","вер","жов","лис","гру"];
 const fd=s=>{const d=new Date(s+"T00:00:00");return d.getDate()+" "+MON[d.getMonth()]+" "+d.getFullYear()};
 const fmt=m=>(m/100).toLocaleString("uk-UA")+" ₴";
-const EM={invalid_credentials:"Невірний e-mail або пароль",email_taken:"Такий e-mail уже зареєстровано",invalid_email:"Введіть коректний e-mail",invalid_password:"Пароль має містити від 8 символів",invalid_name:"Вкажіть ім'я",captcha_failed:"Не вдалося підтвердити, що ви не робот. Оновіть сторінку й спробуйте ще раз",captcha_unavailable:"Перевірка від ботів тимчасово недоступна. Спробуйте пізніше",too_many_requests:"Забагато спроб. Зачекайте кілька хвилин",too_fast:"Ви надто швидко відправили форму. Спробуйте ще раз",invalid_request:"Запит відхилено",network:"Сервер недоступний. Запустіть проєкт через npm run dev або відкрийте розгорнуту версію.",server_misconfigured:"Сервер ще не налаштований (база або SESSION_SECRET)"};
+const EM={invalid_credentials:"Невірний e-mail або пароль",email_taken:"Такий e-mail уже зареєстровано",invalid_email:"Введіть коректний e-mail",invalid_password:"Пароль має містити від 8 символів",invalid_name:"Вкажіть ім'я",captcha_failed:"Не вдалося підтвердити, що ви не робот. Оновіть сторінку й спробуйте ще раз",captcha_unavailable:"Перевірка від ботів тимчасово недоступна. Спробуйте пізніше",too_many_requests:"Забагато спроб. Зачекайте кілька хвилин",too_fast:"Ви надто швидко відправили форму. Спробуйте ще раз",invalid_request:"Запит відхилено",network:"Сервер недоступний. Запустіть проєкт через npm run dev або відкрийте розгорнуту версію.",server_misconfigured:"Сервер ще не налаштований (база або SESSION_SECRET)",social_off:"Цей спосіб входу ще не налаштований",google_failed:"Не вдалося увійти через Google. Спробуйте ще раз",google_denied:"Вхід через Google скасовано",telegram_failed:"Не вдалося підтвердити вхід через Telegram. Спробуйте ще раз",telegram_expired:"Підтвердження Telegram застаріло. Спробуйте ще раз"};
 const api=async(p,body)=>{try{const r=await fetch("/api/"+p,{method:body?"POST":"GET",credentials:"same-origin",headers:{"content-type":"application/json"},body:body?JSON.stringify(body):undefined});const d=await r.json().catch(()=>({}));return{ok:r.ok,...d}}catch(e){return{ok:false,error:"network"}}};
-let user=null,loaded=false,view="in";const subs=[];
+let user=null,loaded=false,view="in",cf={},note=new URLSearchParams(location.search).get("auth_error")||"";const subs=[];
 document.body.insertAdjacentHTML("beforeend",'<div class="au" id="au"><div class="ac" role="dialog" aria-modal="true" aria-label="Вхід"><button class="ax" aria-label="Закрити">×</button><div id="ab"></div></div></div><aside class="ad" id="ad" aria-label="Акаунт"><button class="ax" aria-label="Закрити">×</button><div id="adb" style="display:contents"></div></aside>');
 const base=q("#stays")?"":"index.html";
 const LINKS=[["Оселі","stays.html"],["Куди поїхати",base+"#regions"],["Як це працює",base+"#how"],["Запитання",base+"#faq"]];
@@ -15,7 +15,9 @@ document.body.insertAdjacentHTML("beforeend",'<div class="mnu" id="mnu" aria-hid
 const mnu=q("#mnu"),isMob=()=>window.matchMedia&&matchMedia("(max-width:860px)").matches;
 const au=q("#au"),ad=q("#ad"),pill=q("nav .pill"),pi=pill.querySelector("i"),ico=pi.innerHTML;
 const lock=()=>{document.documentElement.style.overflow=(au.classList.contains("o")||ad.classList.contains("o")||mnu.classList.contains("o"))?"hidden":""};
-const soc=()=>`<div class="asb">${SOC.map(s=>`<button type="button" disabled><b style="background:${s[2]}">${s[1]}</b>${s[0]}<em>скоро</em></button>`).join("")}</div>`;
+const on=k=>k=="google"?!!cf.google:!!cf.telegram_bot_id;
+let tgp=null;const loadTg=()=>tgp||(tgp=new Promise(res=>{const s=document.createElement("script");s.src="https://telegram.org/js/telegram-widget.js?22";s.async=true;s.onload=()=>res(true);s.onerror=()=>res(false);document.head.appendChild(s)}));
+const soc=()=>`<div class="asb">${SOC.map(s=>on(s[3])?`<button type="button" data-s="${s[3]}"><b style="background:${s[2]}">${s[1]}</b>${s[0]}</button>`:`<button type="button" disabled><b style="background:${s[2]}">${s[1]}</b>${s[0]}<em>скоро</em></button>`).join("")}</div><div class="aer" id="asm" style="min-height:0;margin:8px 0 0">${esc(EM[note]||"")}</div>`;
 const fld=(t,n,p,a)=>`<label class="afi"><input type="${t}" name="${n}" placeholder="${p}" autocomplete="${a}"></label>`;
 function render(){const b=q("#ab");let h="";
 if(view=="magic")h=`<h2 class="ah av2">Вхід за посиланням</h2><p class="as av2">Надішлемо на пошту посилання без пароля.</p><form class="av2" data-f="magic">${fld("email","email","Ваш e-mail","email")}<div class="aer"></div><button class="apb">Надіслати посилання</button></form><a href="#" class="alk" data-v="in">← Назад до входу</a>`;
@@ -34,12 +36,15 @@ mnu.addEventListener("click",async e=>{if(e.target.closest(".ax")||e.target.clos
 if(e.target.id=="mli"){closeM();openA("in")}if(e.target.id=="mlo"){await api("auth/logout",{});user=null;paint();closeM();notify()}});
 addEventListener("resize",()=>{if(!isMob())closeM()});
 function openA(v){view=v||"in";render();au.classList.add("o");lock()}
-function closeA(){au.classList.remove("o");lock()}
+function closeA(){au.classList.remove("o");note="";lock()}
 function openD(){paint();ad.classList.add("o");lock();loadBookings()}
 function closeD(){ad.classList.remove("o");lock()}
 pill.addEventListener("click",()=>{if(isMob())return openM();user?openD():openA("in")});
 au.addEventListener("click",e=>{if(e.target==au||e.target.closest(".ax"))return closeA();const v=e.target.closest("[data-v]");if(v){e.preventDefault();view=v.dataset.v;render();return}
-const s=e.target.closest("[data-s]");if(s){const m=q("#asm");if(m)m.textContent="Вхід через "+s.dataset.s+" підключимо найближчим часом. Скористайтесь e-mail."}});
+const s=e.target.closest("[data-s]");if(s){const m=q("#asm");m.textContent="";
+if(s.dataset.s=="google"){location.href="/api/auth/google/start?next="+encodeURIComponent(location.pathname+location.search+location.hash);return}
+if(!window.Telegram||!Telegram.Login){m.textContent=EM.telegram_failed;loadTg();return}
+Telegram.Login.auth({bot_id:cf.telegram_bot_id},async d=>{if(!d)return;const r=await api("auth/telegram",d);if(!r.ok){m.textContent=EM[r.error]||"Щось пішло не так. Спробуйте ще раз.";return}user=r.user;paint();closeA();notify()})}});
 au.addEventListener("submit",async e=>{e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f)),er=f.querySelector(".aer"),t=f.dataset.f;
 if(t=="magic"){er.textContent="Вхід за посиланням з'явиться після підключення пошти. Скористайтесь e-mail і паролем.";return}
 const btn=f.querySelector(".apb");btn.disabled=true;er.textContent="";
@@ -51,4 +56,6 @@ if(e.target.id=="agt"){closeD();if(q("#stays")){if(window.home)home();setTimeout
 addEventListener("keydown",e=>{if(e.key=="Escape"){closeA();closeD();closeM()}});
 window.Auth={get:()=>user,on:f=>{subs.push(f);if(loaded)f(user)},open:openA,drawer:openD};
 api("auth/me").then(d=>{user=d.user||null;loaded=true;paint();notify()});
+Guard.cfg().then(c=>{cf=c;if(cf.telegram_bot_id)loadTg();if(au.classList.contains("o"))render()});
+if(note){history.replaceState(null,"",location.pathname+location.hash);openA("in")}
 })();

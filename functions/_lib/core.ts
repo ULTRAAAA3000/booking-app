@@ -1,4 +1,4 @@
-export interface Env { DB: D1Database; SESSION_SECRET: string; TURNSTILE_SECRET?: string; TURNSTILE_SITE_KEY?: string }
+export interface Env { DB: D1Database; SESSION_SECRET: string; TURNSTILE_SECRET?: string; TURNSTILE_SITE_KEY?: string; GOOGLE_CLIENT_ID?: string; GOOGLE_CLIENT_SECRET?: string; TELEGRAM_BOT_TOKEN?: string }
 export interface User { id: string; name: string; email: string; role: string }
 export interface Property { id: number; slug: string; title: string; region: string; cover: string; price_minor: number; currency: string; max_guests: number; min_nights: number; max_nights: number | null }
 
@@ -15,6 +15,7 @@ export async function body(req: Request): Promise<Record<string, unknown> | null
   try { const t = await req.text(); if (t.length > 10_000) return null; const v = JSON.parse(t); return v && typeof v === 'object' ? v : null; } catch { return null; }
 }
 export const str = (b: Record<string, unknown>, k: string) => (typeof b[k] === 'string' ? (b[k] as string).trim() : '');
+export const realEmail = (e: string) => (e.endsWith('.invalid') ? '' : e); // технічна адреса користувачів без e-mail (Telegram) назовні не віддається
 
 // ---- паролі (PBKDF2) та сесії (cookie з токеном; у базі лише HMAC токена) ----
 const b64 = (u: Uint8Array) => btoa(String.fromCharCode(...u));
@@ -42,7 +43,7 @@ export async function hmac(secret: string, msg: string) {
 }
 const DAYS = 30;
 const sid = (req: Request) => (req.headers.get('cookie') ?? '').split(/;\s*/).find((c) => c.startsWith('sid='))?.slice(4);
-const secure = (req: Request) => (new URL(req.url).protocol === 'https:' ? '; Secure' : '');
+export const secure = (req: Request) => (new URL(req.url).protocol === 'https:' ? '; Secure' : '');
 export async function startSession(env: Env, req: Request, userId: string) {
   const token = b64(crypto.getRandomValues(new Uint8Array(32))).replace(/[+/=]/g, (c) => (c === '+' ? '-' : c === '/' ? '_' : ''));
   const exp = new Date(Date.now() + DAYS * 864e5).toISOString();
@@ -60,7 +61,7 @@ export async function currentUser(env: Env, req: Request): Promise<User | null> 
   if (!t) return null;
   return env.DB.prepare(`SELECT u.id,u.name,u.email,u.role FROM sessions s JOIN users u ON u.id=s.user_id
     WHERE s.token_hash=? AND s.expires_at>strftime('%Y-%m-%dT%H:%M:%fZ','now') AND u.deleted_at IS NULL`)
-    .bind(await hmac(env.SESSION_SECRET, t)).first<User>();
+    .bind(await hmac(env.SESSION_SECRET, t)).first<User>().then((u) => u && { ...u, email: realEmail(u.email) });
 }
 
 // ---- оселі, дати, доступність ----

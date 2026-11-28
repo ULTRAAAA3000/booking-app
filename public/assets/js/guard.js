@@ -11,5 +11,5 @@ return{
 fields:async f=>{const c=await cp;let tok="";if(c.turnstile_site_key&&!st.failed)tok=st.token||await new Promise(r=>{st.w.push(r);setTimeout(()=>r(""),12000)});
 return{website:f&&f.elements&&f.elements.website?f.elements.website.value:"",t:Date.now()-st.shown,turnstile:tok}},
 reset:()=>{st.token="";if(st.id!==null&&window.turnstile)try{turnstile.reset(st.id)}catch(e){}}}}
-return{hp,mount};
+return{hp,mount,cfg:()=>cp};
 })();

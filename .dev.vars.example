@@ -3,3 +3,7 @@ SESSION_SECRET=замініть-на-довгий-випадковий-рядо�
 # Антибот. Для локальної роботи підійдуть тестові ключі Cloudflare (завжди пропускають):
 # TURNSTILE_SITE_KEY=1x00000000000000000000AA
 # TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+# Вхід через Google і Telegram (кнопки вмикаються, щойно змінні задано; інструкція в README):
+# GOOGLE_CLIENT_ID=
+# GOOGLE_CLIENT_SECRET=
+# TELEGRAM_BOT_TOKEN=
